@@ -1,13 +1,17 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "./AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
+import { LogIn, User } from "lucide-react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -15,6 +19,11 @@ const Navbar = () => {
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
   };
 
   const navItems = [
@@ -59,6 +68,31 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2"
+                  onClick={() => navigate("/profile")}
+                >
+                  <User className="h-4 w-4" />
+                  Profile
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                >
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Button asChild className="flex items-center gap-2">
+                <Link to="/auth">
+                  <LogIn className="h-4 w-4" />
+                  Sign in
+                </Link>
+              </Button>
+            )}
             <Button asChild className="ml-4 bg-church-blue hover:bg-blue-500">
               <Link to="/about#visit">Plan Your Visit</Link>
             </Button>
@@ -117,8 +151,47 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            {user ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    navigate("/profile");
+                    closeMenu();
+                  }}
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  Profile
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full mt-2"
+                  onClick={() => {
+                    handleLogout();
+                    closeMenu();
+                  }}
+                >
+                  Sign out
+                </Button>
+              </>
+            ) : (
+              <Button
+                className="w-full mt-2"
+                onClick={() => {
+                  navigate("/auth");
+                  closeMenu();
+                }}
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign in
+              </Button>
+            )}
             <div className="mt-4 px-3">
-              <Button asChild className="w-full bg-church-blue hover:bg-blue-500">
+              <Button
+                asChild
+                className="w-full bg-church-blue hover:bg-blue-500"
+              >
                 <Link to="/about#visit" onClick={closeMenu}>
                   Plan Your Visit
                 </Link>
