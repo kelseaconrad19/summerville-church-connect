@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
-import EventCard from "@/components/EventCard";
+import { EventCalendar } from "@/components/EventCalendar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EventCard from "@/components/EventCard";
 import { fetchEvents } from "@/lib/api/events";
 
 const EventsPage = () => {
@@ -35,18 +36,7 @@ const EventsPage = () => {
         <div className="page-container">
           {/* Calendar Component */}
           <div className="mb-12">
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-              <h2 className="text-2xl font-bold mb-4">Church Calendar</h2>
-              <p className="text-gray-700 mb-6">
-                Here's what's coming up at Summerville Church of Christ. Click on any event for more details.
-              </p>
-              <div className="bg-white border rounded-lg p-4 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-gray-500 mb-4">Interactive calendar would be embedded here.</p>
-                  <p className="text-sm text-gray-400">(In the final implementation, this would be replaced with a dynamic calendar component.)</p>
-                </div>
-              </div>
-            </div>
+            <EventCalendar />
           </div>
           
           {/* Event Tabs */}
