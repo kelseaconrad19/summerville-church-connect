@@ -34,8 +34,9 @@ export function useAdmin() {
       }
     },
     enabled: !!user,
-    staleTime: 60000, // Cache the admin status for 1 minute
-    retry: 1, // Only retry once on failure
+    staleTime: 300000, // Cache the admin status for 5 minutes
+    retry: 2, // Retry twice on failure
+    refetchOnWindowFocus: false, // Don't refetch when window regains focus
   });
 
   return { isAdmin: !!isAdmin, isLoading };

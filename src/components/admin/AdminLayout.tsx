@@ -29,12 +29,14 @@ export function AdminLayout() {
       return;
     }
 
-    console.log("Admin check - User:", user.id, "Is admin:", isAdmin, "Loading:", isLoading);
+    console.log("Admin check - User ID:", user.id);
+    console.log("Admin status:", isAdmin);
+    console.log("Admin loading:", isLoading);
 
     if (!isLoading && isAdmin === false) {
       console.log("User is not an admin, access denied");
-      toast("Unauthorized", {
-        description: "You don't have permission to access this area.",
+      toast.error("You don't have permission to access this area", {
+        description: "Administrative privileges are required."
       });
       navigate("/");
     }
@@ -49,8 +51,8 @@ export function AdminLayout() {
     );
   }
 
-  if (!isAdmin) {
-    return null;
+  if (!user || (!isLoading && !isAdmin)) {
+    return null; // Will be redirected by useEffect
   }
 
   return (

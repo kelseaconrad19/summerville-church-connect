@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,6 +14,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import type { Event } from "@/lib/types/events";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 export default function AdminEventsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,17 +22,25 @@ export default function AdminEventsPage() {
   const { data: events, refetch } = useQuery({
     queryKey: ['admin-events'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .order('date_start', { ascending: true });
+      console.log("Fetching admin events");
+      try {
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .order('date_start', { ascending: true });
 
-      if (error) {
-        console.error("Error fetching events:", error);
-        throw error;
+        if (error) {
+          console.error("Error fetching events:", error);
+          toast.error("Failed to load events");
+          throw error;
+        }
+
+        console.log("Events data:", data);
+        return data as Event[];
+      } catch (error) {
+        console.error("Exception in events fetch:", error);
+        return [];
       }
-
-      return data as Event[];
     },
   });
 
@@ -43,7 +52,13 @@ export default function AdminEventsPage() {
         .update({ is_published: !currentStatus })
         .eq('id', eventId);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error toggling event status:", error);
+        toast.error("Failed to update event status");
+        throw error;
+      }
+      
+      toast.success("Event status updated");
       await refetch();
     } catch (error) {
       console.error("Error toggling event status:", error);
@@ -59,8 +74,8 @@ export default function AdminEventsPage() {
           <h1 className="text-2xl font-bold">Events Management</h1>
           <p className="text-muted-foreground">Manage church events and activities</p>
         </div>
-        <Button onClick={() => console.log("Add new event")}>
-          <CalendarDays className="h-4 w-4 mr-2" />
+        <Button onClick={() => toast.info("Add event feature coming soon")}>
+          <Plus className="h-4 w-4 mr-2" />
           Add New Event
         </Button>
       </div>
@@ -77,6 +92,13 @@ export default function AdminEventsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {events?.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                  No events found
+                </TableCell>
+              </TableRow>
+            )}
             {events?.map((event) => (
               <TableRow key={event.id}>
                 <TableCell className="font-medium">{event.title}</TableCell>
@@ -98,7 +120,7 @@ export default function AdminEventsPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => console.log("Edit event:", event.id)}
+                    onClick={() => toast.info("Edit feature coming soon")}
                   >
                     Edit
                   </Button>
