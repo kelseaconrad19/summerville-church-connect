@@ -34,6 +34,8 @@ export function useAdmin() {
       }
     },
     enabled: !!user,
+    staleTime: 60000, // Cache the admin status for 1 minute
+    retry: 1, // Only retry once on failure
   });
 
   return { isAdmin: !!isAdmin, isLoading };

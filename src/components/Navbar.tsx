@@ -4,14 +4,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "./AuthProvider";
+import { useAdmin } from "@/hooks/use-admin";
 import { supabase } from "@/integrations/supabase/client";
-import { LogIn, User } from "lucide-react";
+import { LogIn, User, LayoutDashboard } from "lucide-react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isAdmin } = useAdmin();
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -70,6 +72,16 @@ const Navbar = () => {
             ))}
             {user ? (
               <div className="flex items-center gap-4">
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2"
+                    onClick={() => navigate("/admin")}
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Admin
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   className="flex items-center gap-2"
@@ -153,6 +165,19 @@ const Navbar = () => {
             ))}
             {user ? (
               <>
+                {isAdmin && (
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate("/admin");
+                      closeMenu();
+                    }}
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Admin Dashboard
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   className="w-full justify-start"

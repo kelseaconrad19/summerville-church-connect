@@ -5,7 +5,6 @@ import { LayoutDashboard, CalendarDays, Users, LogOut } from "lucide-react";
 import { useAdmin } from "@/hooks/use-admin";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import {
   Sidebar,
@@ -21,7 +20,6 @@ export function AdminLayout() {
   const { isAdmin, isLoading } = useAdmin();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { toast: toastUtil } = useToast();
 
   useEffect(() => {
     if (!user) {
@@ -35,19 +33,12 @@ export function AdminLayout() {
 
     if (!isLoading && isAdmin === false) {
       console.log("User is not an admin, access denied");
-      toastUtil({
-        title: "Unauthorized",
+      toast("Unauthorized", {
         description: "You don't have permission to access this area.",
-        variant: "destructive",
       });
       navigate("/");
     }
-  }, [isAdmin, isLoading, user, navigate, toastUtil]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/auth");
-  };
+  }, [isAdmin, isLoading, user, navigate]);
 
   // Show a loading state while checking admin status
   if (isLoading) {
@@ -111,4 +102,9 @@ export function AdminLayout() {
       </div>
     </SidebarProvider>
   );
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    navigate("/auth");
+  }
 }

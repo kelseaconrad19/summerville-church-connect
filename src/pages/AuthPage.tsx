@@ -1,12 +1,14 @@
 
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
+import { useAdmin } from "@/hooks/use-admin";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,6 +20,22 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isAdmin } = useAdmin();
+
+  // Redirect authenticated users
+  useEffect(() => {
+    if (user) {
+      console.log("User is authenticated, redirecting from auth page");
+      // Check if user is admin and redirect accordingly
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    }
+  }, [user, isAdmin, navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +49,8 @@ export default function AuthPage() {
           password,
         });
         if (error) throw error;
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully logged in.",
-        });
+        
+        // Toast message moved to useEffect after successful auth state change
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -47,8 +63,9 @@ export default function AuthPage() {
           },
         });
         if (error) throw error;
+        
         toast({
-          title: "Welcome!",
+          title: "Account created!",
           description: "Your account has been created successfully.",
         });
       }
@@ -58,6 +75,11 @@ export default function AuthPage() {
       setLoading(false);
     }
   };
+
+  // If user is already logged in, redirect them
+  if (user) {
+    return null; // Will be handled by useEffect
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
