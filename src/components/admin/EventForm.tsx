@@ -17,12 +17,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
+import { Switch } from "@/components/ui/switch";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarPlus } from "lucide-react";
+import AddressAutocomplete from "./AddressAutocomplete";
 
 interface EventFormData {
   title: string;
@@ -30,6 +32,10 @@ interface EventFormData {
   location: string;
   date_start: Date;
   date_end: Date;
+  time_start: string;
+  time_end: string;
+  image_url: string;
+  requires_registration: boolean;
 }
 
 interface EventFormProps {
@@ -45,6 +51,10 @@ export function EventForm({ onSuccess }: EventFormProps) {
       location: "",
       date_start: new Date(),
       date_end: new Date(),
+      time_start: "09:00",
+      time_end: "17:00",
+      image_url: "",
+      requires_registration: false,
     },
   });
 
@@ -54,8 +64,16 @@ export function EventForm({ onSuccess }: EventFormProps) {
         title: data.title,
         description: data.description,
         location: data.location,
-        date_start: data.date_start.toISOString(),
-        date_end: data.date_end.toISOString(),
+        date_start: new Date(
+          `${format(data.date_start, "yyyy-MM-dd")}T${data.time_start}`
+        ).toISOString(),
+        date_end: new Date(
+          `${format(data.date_end, "yyyy-MM-dd")}T${data.time_end}`
+        ).toISOString(),
+        time_start: data.time_start,
+        time_end: data.time_end,
+        image_url: data.image_url,
+        requires_registration: data.requires_registration,
         created_by: user?.id,
       });
 
@@ -110,10 +128,10 @@ export function EventForm({ onSuccess }: EventFormProps) {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter event location" {...field} />
-              </FormControl>
+              <AddressAutocomplete
+                value={field.value}
+                onChange={field.onChange}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -151,6 +169,20 @@ export function EventForm({ onSuccess }: EventFormProps) {
 
           <FormField
             control={form.control}
+            name="time_start"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Time</FormLabel>
+                <FormControl>
+                  <Input type="time" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="date_end"
             render={({ field }) => (
               <FormItem>
@@ -177,7 +209,58 @@ export function EventForm({ onSuccess }: EventFormProps) {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="time_end"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>End Time</FormLabel>
+                <FormControl>
+                  <Input type="time" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
+
+        <FormField
+          control={form.control}
+          name="image_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image URL</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter image URL" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="requires_registration"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Require Registration
+                </FormLabel>
+                <div className="text-sm text-muted-foreground">
+                  Enable if attendees need to register for this event
+                </div>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <div className="flex justify-end space-x-2 pt-4">
           <Button type="submit">Create Event</Button>
