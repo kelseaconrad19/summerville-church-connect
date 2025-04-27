@@ -1,26 +1,18 @@
 
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useAuth } from "./AuthProvider";
-import { useAdmin } from "@/hooks/use-admin";
 import { supabase } from "@/integrations/supabase/client";
-import { LogIn, User, LayoutDashboard } from "lucide-react";
+import { NavLinks } from "./navbar/NavLinks";
+import { UserMenu } from "./navbar/UserMenu";
+import { MobileMenu } from "./navbar/MobileMenu";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { isAdmin } = useAdmin();
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
   };
 
   const handleLogout = async () => {
@@ -28,23 +20,13 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Sermons", path: "/sermons" },
-    { name: "Events", path: "/events" },
-    { name: "Ministries", path: "/ministries" },
-    { name: "Prayer Requests", path: "/prayer-request" },
-    { name: "Contact", path: "/contact" },
-  ];
-
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center" onClick={closeMenu}>
+            <Link to="/" className="flex items-center">
               <span className="text-2xl font-heading font-bold text-church-blue">
                 Summerville
               </span>
@@ -56,55 +38,8 @@ const Navbar = () => {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-4 items-center">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition",
-                  pathname === item.path
-                    ? "text-church-blue font-semibold"
-                    : "text-gray-600"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-            {user ? (
-              <div className="flex items-center gap-4">
-                {isAdmin && (
-                  <Button
-                    variant="ghost"
-                    className="flex items-center gap-2"
-                    onClick={() => navigate("/admin")}
-                  >
-                    <LayoutDashboard className="h-4 w-4" />
-                    Admin
-                  </Button>
-                )}
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2"
-                  onClick={() => navigate("/profile")}
-                >
-                  <User className="h-4 w-4" />
-                  Profile
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleLogout}
-                >
-                  Sign out
-                </Button>
-              </div>
-            ) : (
-              <Button asChild className="flex items-center gap-2">
-                <Link to="/auth">
-                  <LogIn className="h-4 w-4" />
-                  Sign in
-                </Link>
-              </Button>
-            )}
+            <NavLinks />
+            <UserMenu />
             <Button asChild className="ml-4 bg-church-blue hover:bg-blue-500">
               <Link to="/about#visit">Plan Your Visit</Link>
             </Button>
@@ -145,86 +80,11 @@ const Navbar = () => {
       </div>
       
       {/* Mobile Navigation */}
-      {menuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={cn(
-                  "block px-3 py-2 rounded-md text-base font-medium",
-                  pathname === item.path
-                    ? "bg-church-light-blue text-church-blue"
-                    : "text-gray-700 hover:bg-gray-100"
-                )}
-                onClick={closeMenu}
-              >
-                {item.name}
-              </Link>
-            ))}
-            {user ? (
-              <>
-                {isAdmin && (
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      navigate("/admin");
-                      closeMenu();
-                    }}
-                  >
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
-                    Admin Dashboard
-                  </Button>
-                )}
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start"
-                  onClick={() => {
-                    navigate("/profile");
-                    closeMenu();
-                  }}
-                >
-                  <User className="h-4 w-4 mr-2" />
-                  Profile
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full mt-2"
-                  onClick={() => {
-                    handleLogout();
-                    closeMenu();
-                  }}
-                >
-                  Sign out
-                </Button>
-              </>
-            ) : (
-              <Button
-                className="w-full mt-2"
-                onClick={() => {
-                  navigate("/auth");
-                  closeMenu();
-                }}
-              >
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign in
-              </Button>
-            )}
-            <div className="mt-4 px-3">
-              <Button
-                asChild
-                className="w-full bg-church-blue hover:bg-blue-500"
-              >
-                <Link to="/about#visit" onClick={closeMenu}>
-                  Plan Your Visit
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <MobileMenu 
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onLogout={handleLogout}
+      />
     </header>
   );
 };
