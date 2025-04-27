@@ -4,6 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -11,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EventForm } from "@/components/admin/EventForm";
 import { supabase } from "@/integrations/supabase/client";
 import type { Event } from "@/lib/types/events";
 import { format } from "date-fns";
@@ -18,6 +26,7 @@ import { toast } from "sonner";
 
 export default function AdminEventsPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: events, refetch } = useQuery({
     queryKey: ['admin-events'],
@@ -67,6 +76,11 @@ export default function AdminEventsPage() {
     }
   };
 
+  const handleEventCreated = () => {
+    setIsDialogOpen(false);
+    refetch();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -74,10 +88,20 @@ export default function AdminEventsPage() {
           <h1 className="text-2xl font-bold">Events Management</h1>
           <p className="text-muted-foreground">Manage church events and activities</p>
         </div>
-        <Button onClick={() => toast.info("Add event feature coming soon")}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add New Event
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Event
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>Create New Event</DialogTitle>
+            </DialogHeader>
+            <EventForm onSuccess={handleEventCreated} />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="rounded-md border">
