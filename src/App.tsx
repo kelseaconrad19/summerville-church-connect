@@ -15,6 +15,8 @@ import PrayerRequestPage from "./pages/PrayerRequestPage";
 import ContactPage from "./pages/ContactPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import { AdminLayout } from "./components/admin/AdminLayout";
+import DashboardPage from "./pages/admin/DashboardPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,9 @@ const App = () => (
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<DashboardPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
