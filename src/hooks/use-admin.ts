@@ -23,7 +23,7 @@ export function useAdmin() {
         if (error) {
           console.error("Admin check error:", error);
           toast.error("Error checking admin status");
-          throw error;
+          return false;
         }
         
         console.log("Admin check result:", data);
@@ -35,9 +35,13 @@ export function useAdmin() {
     },
     enabled: !!user,
     staleTime: 300000, // Cache the admin status for 5 minutes
-    retry: 2, // Retry twice on failure
+    retry: 1, // Only retry once on failure
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    refetchOnMount: true, // Refetch when component mounts
   });
 
-  return { isAdmin: !!isAdmin, isLoading };
+  return { 
+    isAdmin: !!isAdmin, 
+    isLoading 
+  };
 }

@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { LayoutDashboard, CalendarDays, Users, LogOut } from "lucide-react";
 import { useAdmin } from "@/hooks/use-admin";
@@ -17,11 +17,19 @@ import {
 } from "@/components/ui/sidebar";
 
 export function AdminLayout() {
-  const { isAdmin, isLoading } = useAdmin();
+  const { isAdmin, isLoading: isAdminLoading } = useAdmin();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isInitialCheck, setIsInitialCheck] = useState(true);
 
   useEffect(() => {
+    // Only do redirects after initial loading is done
+    if (isInitialCheck && (isAdminLoading || user === null)) {
+      return;
+    }
+    
+    setIsInitialCheck(false);
+    
     if (!user) {
       console.log("No user found, redirecting to login");
       toast.error("Please log in to access the admin area");
@@ -31,19 +39,19 @@ export function AdminLayout() {
 
     console.log("Admin check - User ID:", user.id);
     console.log("Admin status:", isAdmin);
-    console.log("Admin loading:", isLoading);
+    console.log("Admin loading:", isAdminLoading);
 
-    if (!isLoading && isAdmin === false) {
+    if (!isAdminLoading && isAdmin === false) {
       console.log("User is not an admin, access denied");
       toast.error("You don't have permission to access this area", {
         description: "Administrative privileges are required."
       });
       navigate("/");
     }
-  }, [isAdmin, isLoading, user, navigate]);
+  }, [isAdmin, isAdminLoading, user, navigate, isInitialCheck]);
 
   // Show a loading state while checking admin status
-  if (isLoading) {
+  if (isAdminLoading || isInitialCheck) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-lg">Checking permissions...</div>
@@ -51,7 +59,7 @@ export function AdminLayout() {
     );
   }
 
-  if (!user || (!isLoading && !isAdmin)) {
+  if (!user || (!isAdminLoading && !isAdmin)) {
     return null; // Will be redirected by useEffect
   }
 
