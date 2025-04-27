@@ -1,8 +1,10 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ServiceTimes from "@/components/ServiceTimes";
 import EventCard from "@/components/EventCard";
 import MinistryCard from "@/components/MinistryCard";
+import EventCards from "@/components/EventCards";
 
 const HomePage = () => {
   return (
