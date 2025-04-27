@@ -16,7 +16,7 @@ import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
-import AdminEventsPage from "./pages/admin/AdminEventsPage";
+import AdminEventsPage from "./pages/admin/EventsPage";
 
 const queryClient = new QueryClient();
 
