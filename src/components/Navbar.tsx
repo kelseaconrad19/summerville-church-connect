@@ -1,0 +1,134 @@
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+  
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Sermons", path: "/sermons" },
+    { name: "Events", path: "/events" },
+    { name: "Ministries", path: "/ministries" },
+    { name: "Prayer Requests", path: "/prayer-request" },
+    { name: "Contact", path: "/contact" },
+  ];
+
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="flex items-center" onClick={closeMenu}>
+              <span className="text-2xl font-heading font-bold text-church-blue">
+                Summerville
+              </span>
+              <span className="text-xl font-heading ml-2 text-gray-700">
+                Church of Christ
+              </span>
+            </Link>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-4 items-center">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={cn(
+                  "px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition",
+                  pathname === item.path
+                    ? "text-church-blue font-semibold"
+                    : "text-gray-600"
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Button asChild className="ml-4 bg-church-blue hover:bg-blue-500">
+              <Link to="/about#visit">Plan Your Visit</Link>
+            </Button>
+          </nav>
+          
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-church-blue hover:bg-gray-100 focus:outline-none"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {menuOpen ? (
+                <svg
+                  className="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg
+                  className="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile Navigation */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={cn(
+                  "block px-3 py-2 rounded-md text-base font-medium",
+                  pathname === item.path
+                    ? "bg-church-light-blue text-church-blue"
+                    : "text-gray-700 hover:bg-gray-100"
+                )}
+                onClick={closeMenu}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <div className="mt-4 px-3">
+              <Button asChild className="w-full bg-church-blue hover:bg-blue-500">
+                <Link to="/about#visit" onClick={closeMenu}>
+                  Plan Your Visit
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Navbar;
