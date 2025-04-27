@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ServiceTimes from "@/components/ServiceTimes";
@@ -80,7 +79,7 @@ const HomePage = () => {
             <div className="text-center p-6 rounded-lg bg-church-light-blue">
               <div className="bg-white p-4 inline-block rounded-full mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-10 w-10 text-church-blue">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 019-9m0 18c-1.657 0-3-4.03-3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s-1.343-9-3-9m-9 9a9 9 0 019-9" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-2">Serve Our City</h3>
@@ -143,69 +142,7 @@ const HomePage = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <EventCard 
-              event={{
-                id: "sample1",
-                title: "Family Fun Night",
-                description: "Join us for games, food, and fellowship perfect for the entire family.",
-                date_start: "2023-05-15T18:00:00",
-                date_end: "2023-05-15T21:00:00",
-                image_url: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-                created_at: "",
-                created_by: "",
-                updated_at: "",
-                is_published: true,
-                is_recurring: false,
-                location: "Church Fellowship Hall",
-                max_attendees: 100,
-                requires_registration: false,
-                time_start: null,
-                time_end: null,
-                recurrence_pattern: null
-              }}
-            />
-            <EventCard 
-              event={{
-                id: "sample2",
-                title: "Bible Study Series",
-                description: "An in-depth study of the book of Romans led by Pastor Johnson.",
-                date_start: new Date().toISOString(),
-                date_end: new Date().toISOString(),
-                image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-                time_start: "19:00:00",
-                is_recurring: true,
-                recurrence_pattern: "weekly",
-                created_at: "",
-                created_by: "",
-                updated_at: "",
-                is_published: true,
-                location: "Church Sanctuary",
-                max_attendees: 50,
-                requires_registration: false,
-                time_end: "20:30:00"
-              }}
-            />
-            <EventCard 
-              event={{
-                id: "sample3",
-                title: "Community Service Day",
-                description: "Volunteer to help clean up local parks and serve our community.",
-                date_start: "2023-06-03T09:00:00",
-                date_end: "2023-06-03T14:00:00",
-                image_url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-                created_at: "",
-                created_by: "",
-                updated_at: "",
-                is_published: true,
-                is_recurring: false,
-                location: "Local Community Park",
-                max_attendees: 75,
-                requires_registration: true,
-                time_start: null,
-                time_end: null,
-                recurrence_pattern: null
-              }}
-            />
+            <EventCards />
           </div>
           
           <div className="text-center mt-10">
