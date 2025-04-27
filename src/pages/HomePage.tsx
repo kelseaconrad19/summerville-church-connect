@@ -153,7 +153,15 @@ const HomePage = () => {
                 image_url: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
                 created_at: "",
                 created_by: "",
-                updated_at: ""
+                updated_at: "",
+                is_published: true,
+                is_recurring: false,
+                location: "Church Fellowship Hall",
+                max_attendees: 100,
+                requires_registration: false,
+                time_start: null,
+                time_end: null,
+                recurrence_pattern: null
               }}
             />
             <EventCard 
@@ -161,7 +169,7 @@ const HomePage = () => {
                 id: "sample2",
                 title: "Bible Study Series",
                 description: "An in-depth study of the book of Romans led by Pastor Johnson.",
-                date_start: new Date().toISOString(), // Use current date
+                date_start: new Date().toISOString(),
                 date_end: new Date().toISOString(),
                 image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
                 time_start: "19:00:00",
@@ -169,7 +177,12 @@ const HomePage = () => {
                 recurrence_pattern: "weekly",
                 created_at: "",
                 created_by: "",
-                updated_at: ""
+                updated_at: "",
+                is_published: true,
+                location: "Church Sanctuary",
+                max_attendees: 50,
+                requires_registration: false,
+                time_end: "20:30:00"
               }}
             />
             <EventCard 
@@ -182,7 +195,15 @@ const HomePage = () => {
                 image_url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
                 created_at: "",
                 created_by: "",
-                updated_at: ""
+                updated_at: "",
+                is_published: true,
+                is_recurring: false,
+                location: "Local Community Park",
+                max_attendees: 75,
+                requires_registration: true,
+                time_start: null,
+                time_end: null,
+                recurrence_pattern: null
               }}
             />
           </div>
