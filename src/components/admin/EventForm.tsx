@@ -63,16 +63,18 @@ export function EventForm({ onSuccess }: EventFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <EventBasicInfo control={form.control} />
-        <EventDateTimeFields control={form.control} />
-        <EventAdditionalInfo control={form.control} />
-        
-        <div className="flex justify-end space-x-2 pt-4">
-          <Button type="submit">Create Event</Button>
-        </div>
-      </form>
-    </Form>
+    <div className="max-h-[calc(100vh-8rem)] overflow-y-auto p-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <EventBasicInfo control={form.control} />
+          <EventDateTimeFields control={form.control} />
+          <EventAdditionalInfo control={form.control} />
+          
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button type="submit">Create Event</Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
