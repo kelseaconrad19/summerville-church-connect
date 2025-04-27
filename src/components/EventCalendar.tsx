@@ -12,14 +12,14 @@ import type { Event } from "@/lib/types/events";
 export function EventCalendar() {
   const [selectedDate, setSelectedDate] = useState<Date>();
 
-  const { data: events } = useQuery({
+  const { data: events, isLoading } = useQuery({
     queryKey: ['events-calendar'],
     queryFn: async () => {
+      console.log("Fetching events for calendar");
       const { data, error } = await supabase
         .from('events')
         .select('*')
         .eq('is_published', true)
-        .gte('date_start', new Date().toISOString())
         .order('date_start', { ascending: true });
 
       if (error) {
@@ -27,6 +27,7 @@ export function EventCalendar() {
         throw error;
       }
 
+      console.log("Calendar events fetched:", data);
       return data as Event[];
     },
   });
@@ -34,8 +35,9 @@ export function EventCalendar() {
   // Filter events for the selected date
   const selectedDateEvents = events?.filter(event => {
     if (!selectedDate) return false;
-    return format(new Date(event.date_start), 'yyyy-MM-dd') === 
-           format(selectedDate, 'yyyy-MM-dd');
+    
+    const eventDate = new Date(event.date_start);
+    return format(eventDate, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
   });
 
   return (
@@ -50,9 +52,10 @@ export function EventCalendar() {
             modifiers={{
               booked: (date) => {
                 return events?.some(
-                  (event) =>
-                    format(new Date(event.date_start), 'yyyy-MM-dd') === 
-                    format(date, 'yyyy-MM-dd')
+                  (event) => {
+                    const eventDate = new Date(event.date_start);
+                    return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+                  }
                 ) ?? false;
               },
             }}
@@ -79,7 +82,9 @@ export function EventCalendar() {
               </h3>
             </div>
             
-            {selectedDate && (
+            {isLoading ? (
+              <p className="text-muted-foreground">Loading events...</p>
+            ) : selectedDate && (
               <div className="space-y-4">
                 {selectedDateEvents?.length === 0 ? (
                   <p className="text-muted-foreground">

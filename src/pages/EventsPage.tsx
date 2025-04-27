@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
@@ -10,12 +11,12 @@ import { fetchEvents } from "@/lib/api/events";
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
 
-  const { data: upcomingEvents, refetch: refetchUpcoming } = useQuery({
+  const { data: upcomingEvents, refetch: refetchUpcoming, isLoading: isLoadingUpcoming } = useQuery({
     queryKey: ["events", "upcoming"],
     queryFn: () => fetchEvents("upcoming"),
   });
 
-  const { data: recurringEvents, refetch: refetchRecurring } = useQuery({
+  const { data: recurringEvents, refetch: refetchRecurring, isLoading: isLoadingRecurring } = useQuery({
     queryKey: ["events", "recurring"],
     queryFn: () => fetchEvents("recurring"),
   });
@@ -24,6 +25,9 @@ const EventsPage = () => {
     refetchUpcoming();
     refetchRecurring();
   };
+  
+  console.log("Upcoming events:", upcomingEvents);
+  console.log("Recurring events:", recurringEvents);
   
   return (
     <div>
@@ -49,27 +53,43 @@ const EventsPage = () => {
             </div>
             
             <TabsContent value="upcoming">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {upcomingEvents?.map((event) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    onRegister={handleEventRegistration}
-                  />
-                ))}
-              </div>
+              {isLoadingUpcoming ? (
+                <div className="text-center py-8">Loading upcoming events...</div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {upcomingEvents?.length === 0 ? (
+                    <div className="col-span-full text-center py-8">No upcoming events found</div>
+                  ) : (
+                    upcomingEvents?.map((event) => (
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        onRegister={handleEventRegistration}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="recurring">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recurringEvents?.map((event) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    onRegister={handleEventRegistration}
-                  />
-                ))}
-              </div>
+              {isLoadingRecurring ? (
+                <div className="text-center py-8">Loading recurring events...</div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {recurringEvents?.length === 0 ? (
+                    <div className="col-span-full text-center py-8">No recurring events found</div>
+                  ) : (
+                    recurringEvents?.map((event) => (
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        onRegister={handleEventRegistration}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
           

@@ -5,12 +5,15 @@ import { Event, EventWithAttendees } from "@/lib/types/events";
 export async function fetchEvents(type: "upcoming" | "recurring" = "upcoming") {
   const today = new Date();
   
+  console.log(`Fetching ${type} events`);
+  
   const query = supabase
     .from("events")
     .select(`
       *,
       events_attendees(count)
-    `, { count: "exact" });
+    `, { count: "exact" })
+    .eq("is_published", true);  // Only fetch published events
 
   if (type === "upcoming") {
     query.eq("is_recurring", false)
@@ -26,8 +29,9 @@ export async function fetchEvents(type: "upcoming" | "recurring" = "upcoming") {
     console.error("Error fetching events:", error);
     throw error;
   }
-
-  return data;
+  
+  console.log(`Fetched ${data?.length || 0} ${type} events:`, data);
+  return data || [];
 }
 
 export async function registerForEvent(eventId: string) {
