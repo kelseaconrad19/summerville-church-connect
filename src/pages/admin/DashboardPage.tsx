@@ -2,25 +2,55 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/use-admin";
 
 export default function DashboardPage() {
-  const { data: eventStats } = useQuery({
+  const { isAdmin } = useAdmin();
+
+  const { data: eventStats, isError, error } = useQuery({
     queryKey: ['eventStats'],
     queryFn: async () => {
-      const [totalEvents, upcomingEvents] = await Promise.all([
-        supabase.from('events').select('*', { count: 'exact' }),
-        supabase
-          .from('events')
-          .select('*', { count: 'exact' })
-          .gte('date_start', new Date().toISOString())
-      ]);
+      try {
+        const [totalEvents, upcomingEvents] = await Promise.all([
+          supabase.from('events').select('*', { count: 'exact' }),
+          supabase
+            .from('events')
+            .select('*', { count: 'exact' })
+            .gte('date_start', new Date().toISOString())
+        ]);
 
-      return {
-        total: totalEvents.count || 0,
-        upcoming: upcomingEvents.count || 0,
-      };
+        if (totalEvents.error) {
+          console.error("Error fetching total events:", totalEvents.error);
+          throw totalEvents.error;
+        }
+
+        if (upcomingEvents.error) {
+          console.error("Error fetching upcoming events:", upcomingEvents.error);
+          throw upcomingEvents.error;
+        }
+
+        return {
+          total: totalEvents.count || 0,
+          upcoming: upcomingEvents.count || 0,
+        };
+      } catch (err) {
+        console.error("Error in event stats query:", err);
+        throw err;
+      }
     },
+    enabled: isAdmin,
   });
+
+  if (isError) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="rounded-md bg-red-50 p-4">
+          <p className="text-red-700">Error loading event statistics: {String(error)}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

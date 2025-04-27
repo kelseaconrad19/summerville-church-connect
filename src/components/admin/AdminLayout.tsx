@@ -6,6 +6,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import {
   Sidebar,
   SidebarContent,
@@ -20,25 +21,44 @@ export function AdminLayout() {
   const { isAdmin, isLoading } = useAdmin();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { toast: toastUtil } = useToast();
 
   useEffect(() => {
-    if (!isLoading && !isAdmin) {
-      toast({
+    if (!user) {
+      console.log("No user found, redirecting to login");
+      toast.error("Please log in to access the admin area");
+      navigate("/auth");
+      return;
+    }
+
+    console.log("Admin check - User:", user.id, "Is admin:", isAdmin, "Loading:", isLoading);
+
+    if (!isLoading && isAdmin === false) {
+      console.log("User is not an admin, access denied");
+      toastUtil({
         title: "Unauthorized",
         description: "You don't have permission to access this area.",
         variant: "destructive",
       });
       navigate("/");
     }
-  }, [isAdmin, isLoading, navigate, toast]);
+  }, [isAdmin, isLoading, user, navigate, toastUtil]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/auth");
   };
 
-  if (isLoading || !isAdmin) {
+  // Show a loading state while checking admin status
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Checking permissions...</div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
     return null;
   }
 
