@@ -9,17 +9,44 @@ import type { Event } from "@/lib/types/events";
 interface EventCardProps {
   event: Event;
   onRegister?: () => void;
+  // Legacy props support for HomePage
+  title?: string;
+  date?: string;
+  time?: string;
+  description?: string;
+  image?: string;
 }
 
-const EventCard = ({ event, onRegister }: EventCardProps) => {
+const EventCard = ({ event, onRegister, title, date, time, description, image }: EventCardProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+
+  // Handle both direct event object and legacy props
+  const eventTitle = event?.title || title;
+  const eventDescription = event?.description || description;
+  const eventImage = event?.image_url || image;
+  
+  // Support both date formats
+  const formattedDate = event?.date_start 
+    ? new Date(event.date_start).toLocaleDateString()
+    : date;
+  
+  const formattedTime = event?.time_start || time || "";
 
   const handleRegister = async () => {
     if (!user) {
       toast({
         title: "Please sign in",
         description: "You need to be signed in to register for events.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!event?.id) {
+      toast({
+        title: "Error",
+        description: "Invalid event information",
         variant: "destructive",
       });
       return;
@@ -41,16 +68,13 @@ const EventCard = ({ event, onRegister }: EventCardProps) => {
     }
   };
 
-  const formattedDate = new Date(event.date_start).toLocaleDateString();
-  const formattedTime = event.time_start || "";
-
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {event.image_url && (
+      {eventImage && (
         <div className="h-48 overflow-hidden">
           <img 
-            src={event.image_url} 
-            alt={event.title} 
+            src={eventImage} 
+            alt={eventTitle} 
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
@@ -59,9 +83,9 @@ const EventCard = ({ event, onRegister }: EventCardProps) => {
         <div className="text-sm text-church-blue font-medium mb-2">
           {formattedDate} {formattedTime && `• ${formattedTime}`}
         </div>
-        <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-        <p className="text-gray-600 mb-4">{event.description}</p>
-        {event.requires_registration && (
+        <h3 className="text-xl font-bold mb-2">{eventTitle}</h3>
+        <p className="text-gray-600 mb-4">{eventDescription}</p>
+        {event?.requires_registration && (
           <Button 
             className="bg-church-blue hover:bg-blue-500 w-full"
             onClick={handleRegister}
@@ -69,7 +93,7 @@ const EventCard = ({ event, onRegister }: EventCardProps) => {
             Register Now
           </Button>
         )}
-        {!event.requires_registration && (
+        {(!event || !event.requires_registration) && (
           <Button 
             className="bg-church-blue hover:bg-blue-500 w-full"
           >

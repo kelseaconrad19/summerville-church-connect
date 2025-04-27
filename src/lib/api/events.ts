@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Event } from "@/lib/types/events";
+import { Event, EventWithAttendees } from "@/lib/types/events";
 
 export async function fetchEvents(type: "upcoming" | "recurring" = "upcoming") {
   const today = new Date();
@@ -31,9 +31,19 @@ export async function fetchEvents(type: "upcoming" | "recurring" = "upcoming") {
 }
 
 export async function registerForEvent(eventId: string) {
+  // Get current user from supabase
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  
   const { data, error } = await supabase
     .from("events_attendees")
-    .insert([{ event_id: eventId }])
+    .insert([{ 
+      event_id: eventId,
+      user_id: user.id 
+    }])
     .select()
     .single();
 
