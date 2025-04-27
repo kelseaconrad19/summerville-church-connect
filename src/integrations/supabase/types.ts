@@ -9,6 +9,98 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      events: {
+        Row: {
+          created_at: string
+          created_by: string
+          date_end: string
+          date_start: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          is_recurring: boolean | null
+          location: string | null
+          max_attendees: number | null
+          recurrence_pattern: string | null
+          requires_registration: boolean | null
+          time_end: string | null
+          time_start: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          date_end: string
+          date_start: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          is_recurring?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          recurrence_pattern?: string | null
+          requires_registration?: boolean | null
+          time_end?: string | null
+          time_start?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          date_end?: string
+          date_start?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          is_recurring?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          recurrence_pattern?: string | null
+          requires_registration?: boolean | null
+          time_end?: string | null
+          time_start?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events_attendees: {
+        Row: {
+          event_id: string
+          id: string
+          registered_at: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          event_id: string
+          id?: string
+          registered_at?: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          event_id?: string
+          id?: string
+          registered_at?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_attendees_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

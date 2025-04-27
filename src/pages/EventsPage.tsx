@@ -1,100 +1,29 @@
-
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
 import EventCard from "@/components/EventCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchEvents } from "@/lib/api/events";
 
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
-  
-  // Sample events data
-  const upcomingEvents = [
-    {
-      id: 1,
-      title: "Family Fun Night",
-      date: "May 15, 2023",
-      time: "6:00 PM",
-      description: "Join us for games, food, and fellowship perfect for the entire family. We'll have activities for all ages!",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 2,
-      title: "Bible Study Series",
-      date: "Every Wednesday",
-      time: "7:00 PM",
-      description: "An in-depth study of the book of Romans led by Pastor Johnson. Bring your Bible and a friend!",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 3,
-      title: "Community Service Day",
-      date: "June 3, 2023",
-      time: "9:00 AM",
-      description: "Volunteer to help clean up local parks and serve our community. Supplies and lunch will be provided.",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 4,
-      title: "Men's Prayer Breakfast",
-      date: "May 20, 2023",
-      time: "8:00 AM",
-      description: "A time of fellowship, prayer, and encouragement for men. Enjoy a delicious breakfast while connecting with others.",
-      image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 5,
-      title: "Women's Bible Study",
-      date: "Every Thursday",
-      time: "10:00 AM",
-      description: "Join us for coffee, prayer, and study of God's Word. This weekly gathering is a wonderful opportunity for women to grow together.",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 6,
-      title: "Vacation Bible School",
-      date: "June 12-16, 2023",
-      time: "9:00 AM - 12:00 PM",
-      description: "A week of Bible stories, crafts, games, and fun for children ages 4-12. Registration opens May 1st!",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    }
-  ];
-  
-  const recurringEvents = [
-    {
-      id: 7,
-      title: "Sunday Worship",
-      date: "Every Sunday",
-      time: "10:30 AM",
-      description: "Our main worship service featuring a cappella singing, communion, prayer, and Bible-based teaching.",
-      image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 8,
-      title: "Sunday Bible Classes",
-      date: "Every Sunday",
-      time: "9:00 AM",
-      description: "Age-appropriate Bible study classes for all ages, from children to adults.",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 9,
-      title: "Wednesday Bible Study",
-      date: "Every Wednesday",
-      time: "7:00 PM",
-      description: "Midweek Bible study for all ages. Adults meet in the auditorium, while children and teens have separate classes.",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    },
-    {
-      id: 10,
-      title: "Youth Group",
-      date: "Every Sunday",
-      time: "5:00 PM",
-      description: "Weekly gathering for teens featuring games, Bible study, discussion, and dinner.",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-    }
-  ];
 
+  const { data: upcomingEvents, refetch: refetchUpcoming } = useQuery({
+    queryKey: ["events", "upcoming"],
+    queryFn: () => fetchEvents("upcoming"),
+  });
+
+  const { data: recurringEvents, refetch: refetchRecurring } = useQuery({
+    queryKey: ["events", "recurring"],
+    queryFn: () => fetchEvents("recurring"),
+  });
+
+  const handleEventRegistration = () => {
+    refetchUpcoming();
+    refetchRecurring();
+  };
+  
   return (
     <div>
       <PageHeader 
@@ -131,14 +60,11 @@ const EventsPage = () => {
             
             <TabsContent value="upcoming">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {upcomingEvents.map((event) => (
+                {upcomingEvents?.map((event) => (
                   <EventCard
                     key={event.id}
-                    title={event.title}
-                    date={event.date}
-                    time={event.time}
-                    description={event.description}
-                    image={event.image}
+                    event={event}
+                    onRegister={handleEventRegistration}
                   />
                 ))}
               </div>
@@ -146,14 +72,11 @@ const EventsPage = () => {
             
             <TabsContent value="recurring">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recurringEvents.map((event) => (
+                {recurringEvents?.map((event) => (
                   <EventCard
                     key={event.id}
-                    title={event.title}
-                    date={event.date}
-                    time={event.time}
-                    description={event.description}
-                    image={event.image}
+                    event={event}
+                    onRegister={handleEventRegistration}
                   />
                 ))}
               </div>
