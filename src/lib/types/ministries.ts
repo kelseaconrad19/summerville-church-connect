@@ -10,6 +10,9 @@ export interface Ministry {
   created_at: string;
   updated_at: string;
   created_by: string;
+  involvement_description: string | null;
+  involvement_ways: string[] | null;
+  activities: string[] | null;
 }
 
 export interface MinistryFormValues {
@@ -19,4 +22,7 @@ export interface MinistryFormValues {
   contact_last_name: string;
   contact_email: string;
   description: string;
+  involvement_description: string;
+  involvement_ways: string[];
+  activities: string[];
 }

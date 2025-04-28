@@ -103,6 +103,7 @@ export type Database = {
       }
       ministries: {
         Row: {
+          activities: Json | null
           contact_email: string
           contact_first_name: string
           contact_last_name: string
@@ -111,10 +112,13 @@ export type Database = {
           description: string
           id: string
           image_url: string | null
+          involvement_description: string | null
+          involvement_ways: Json | null
           title: string
           updated_at: string
         }
         Insert: {
+          activities?: Json | null
           contact_email: string
           contact_first_name: string
           contact_last_name: string
@@ -123,10 +127,13 @@ export type Database = {
           description: string
           id?: string
           image_url?: string | null
+          involvement_description?: string | null
+          involvement_ways?: Json | null
           title: string
           updated_at?: string
         }
         Update: {
+          activities?: Json | null
           contact_email?: string
           contact_first_name?: string
           contact_last_name?: string
@@ -135,6 +142,8 @@ export type Database = {
           description?: string
           id?: string
           image_url?: string | null
+          involvement_description?: string | null
+          involvement_ways?: Json | null
           title?: string
           updated_at?: string
         }

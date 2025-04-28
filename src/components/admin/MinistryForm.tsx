@@ -8,6 +8,7 @@ import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 import { Button } from '@/components/ui/button';
+import { Plus, X } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -28,6 +29,9 @@ const formSchema = z.object({
   contact_last_name: z.string().min(1, 'Last name is required'),
   contact_email: z.string().email('Invalid email address'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
+  involvement_description: z.string().optional().nullable(),
+  involvement_ways: z.array(z.string()).min(1, 'At least one way to get involved is required'),
+  activities: z.array(z.string())
 });
 
 interface MinistryFormProps {
@@ -48,6 +52,9 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
       contact_last_name: '',
       contact_email: '',
       description: '',
+      involvement_description: '',
+      involvement_ways: [''],
+      activities: ['', '', '', ''],
     },
   });
 
@@ -66,6 +73,9 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
         contact_last_name: values.contact_last_name,
         contact_email: values.contact_email,
         description: values.description,
+        involvement_description: values.involvement_description || null,
+        involvement_ways: values.involvement_ways.filter(way => way.trim() !== ''),
+        activities: values.activities.filter(activity => activity.trim() !== ''),
         created_by: user.id
       };
 
@@ -90,6 +100,23 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
       setIsLoading(false);
     }
   }
+
+  // Helper to add another way to get involved
+  const addInvolvementWay = () => {
+    const currentWays = form.getValues('involvement_ways');
+    form.setValue('involvement_ways', [...currentWays, '']);
+  };
+
+  // Helper to remove a way to get involved
+  const removeInvolvementWay = (index: number) => {
+    const currentWays = form.getValues('involvement_ways');
+    if (currentWays.length > 1) {
+      form.setValue(
+        'involvement_ways',
+        currentWays.filter((_, i) => i !== index)
+      );
+    }
+  };
 
   return (
     <Form {...form}>
@@ -194,6 +221,101 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
             </FormItem>
           )}
         />
+
+        {/* New fields for involvement information */}
+        <div className="space-y-6 border-t pt-6 mt-6">
+          <h3 className="text-lg font-medium">How To Get Involved</h3>
+          
+          <FormField
+            control={form.control}
+            name="involvement_description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Involvement Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Describe how people can get involved with this ministry..."
+                    className="min-h-24"
+                    {...field}
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <FormLabel className="text-base">Ways To Get Involved</FormLabel>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm"
+                onClick={addInvolvementWay}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add Way
+              </Button>
+            </div>
+            
+            {form.watch('involvement_ways').map((_, index) => (
+              <div key={index} className="flex items-start gap-2">
+                <FormField
+                  control={form.control}
+                  name={`involvement_ways.${index}`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormControl>
+                        <Input 
+                          placeholder={`Way to get involved #${index + 1}`} 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {index > 0 && (
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => removeInvolvementWay(index)}
+                    className="mt-0.5"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <FormLabel className="text-base">Ministry Activities</FormLabel>
+            <p className="text-sm text-muted-foreground">
+              List up to 4 recurring or important activities for this ministry
+            </p>
+            
+            {[0, 1, 2, 3].map((index) => (
+              <FormField
+                key={index}
+                control={form.control}
+                name={`activities.${index}`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input 
+                        placeholder={`Activity ${index + 1} (e.g., "Sunday Bible Study at 9:00 AM")`}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
+        </div>
 
         <Button 
           type="submit" 
