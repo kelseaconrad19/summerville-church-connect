@@ -7,9 +7,10 @@ import { Loader2, Upload, X } from "lucide-react";
 interface ImageUploadProps {
   value?: string;
   onChange: (url: string) => void;
+  bucket?: string;
 }
 
-export function ImageUpload({ value, onChange }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, bucket = "event_images" }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +41,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
       // Upload the file to Supabase Storage
       const { data, error: uploadError } = await supabase.storage
-        .from('event_images')
+        .from(bucket)
         .upload(filePath, file);
 
       if (uploadError) {
@@ -49,7 +50,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
       // Get the public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('event_images')
+        .from(bucket)
         .getPublicUrl(filePath);
 
       // Update the form value

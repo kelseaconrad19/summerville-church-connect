@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AdminEventsPage from "./pages/admin/EventsPage";
+import AdminMinistriesPage from "./pages/admin/MinistriesPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<DashboardPage />} />
               <Route path="events" element={<AdminEventsPage />} />
+              <Route path="ministries" element={<AdminMinistriesPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -101,6 +101,45 @@ export type Database = {
           },
         ]
       }
+      ministries: {
+        Row: {
+          contact_email: string
+          contact_first_name: string
+          contact_last_name: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          image_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          contact_email: string
+          contact_first_name: string
+          contact_last_name: string
+          created_at?: string
+          created_by: string
+          description: string
+          id?: string
+          image_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string
+          contact_first_name?: string
+          contact_last_name?: string
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
