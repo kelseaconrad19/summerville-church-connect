@@ -6,10 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { NavLinks } from "./navbar/NavLinks";
 import { UserMenu } from "./navbar/UserMenu";
 import { MobileMenu } from "./navbar/MobileMenu";
+import { useAdmin } from "@/hooks/use-admin";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -43,6 +45,15 @@ const Navbar = () => {
             <Button asChild className="ml-4 bg-church-blue hover:bg-blue-500">
               <Link to="/about#visit">Plan Your Visit</Link>
             </Button>
+            {isAdmin && (
+              <Button 
+                variant="outline"
+                className="ml-2"
+                onClick={() => navigate("/auth")}
+              >
+                Admin Login
+              </Button>
+            )}
           </nav>
           
           {/* Mobile menu button */}

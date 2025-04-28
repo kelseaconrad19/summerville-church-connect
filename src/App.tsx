@@ -41,6 +41,7 @@ const App = () => (
               <Route path="/prayer-request" element={<PrayerRequestPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/profile" element={<AboutPage />} /> {/* Temporary placeholder */}
               <Route path="*" element={<NotFound />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />}>

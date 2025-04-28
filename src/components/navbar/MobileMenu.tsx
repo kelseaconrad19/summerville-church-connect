@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { LogIn, User, LayoutDashboard } from "lucide-react";
+import { User, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { useAdmin } from "@/hooks/use-admin";
 import { navItems } from "./NavLinks";
@@ -24,21 +24,60 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
   return (
     <div className="md:hidden bg-white border-t">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        {navItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.path}
-            className={cn(
-              "block px-3 py-2 rounded-md text-base font-medium",
-              pathname === item.path
-                ? "bg-church-light-blue text-church-blue"
-                : "text-gray-700 hover:bg-gray-100"
-            )}
-            onClick={onClose}
-          >
-            {item.name}
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          if (item.children) {
+            return (
+              <div key={item.name} className="space-y-1">
+                <Link
+                  to={item.path}
+                  className={cn(
+                    "block px-3 py-2 rounded-md text-base font-medium",
+                    pathname === item.path
+                      ? "bg-church-light-blue text-church-blue"
+                      : "text-gray-700 hover:bg-gray-100"
+                  )}
+                  onClick={onClose}
+                >
+                  {item.name}
+                </Link>
+                <div className="pl-4 border-l-2 border-gray-200 space-y-1">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.name}
+                      to={child.path}
+                      className={cn(
+                        "block px-3 py-2 rounded-md text-sm font-medium",
+                        pathname === child.path
+                          ? "bg-church-light-blue text-church-blue"
+                          : "text-gray-700 hover:bg-gray-100"
+                      )}
+                      onClick={onClose}
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          
+          return (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={cn(
+                "block px-3 py-2 rounded-md text-base font-medium",
+                pathname === item.path
+                  ? "bg-church-light-blue text-church-blue"
+                  : "text-gray-700 hover:bg-gray-100"
+              )}
+              onClick={onClose}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
+        
         {user ? (
           <>
             {isAdmin && (
@@ -76,7 +115,7 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
               Sign out
             </Button>
           </>
-        ) : (
+        ) : isAdmin && (
           <Button
             className="w-full mt-2"
             onClick={() => {
@@ -84,10 +123,10 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
               onClose();
             }}
           >
-            <LogIn className="h-4 w-4 mr-2" />
-            Sign in
+            Admin Login
           </Button>
         )}
+        
         <div className="mt-4 px-3">
           <Button asChild className="w-full bg-church-blue hover:bg-blue-500">
             <Link to="/about#visit" onClick={onClose}>
