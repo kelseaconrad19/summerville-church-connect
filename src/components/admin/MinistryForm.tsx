@@ -59,7 +59,6 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
 
     setIsLoading(true);
     try {
-      // Make sure all required fields are properly set
       const ministryData = {
         title: values.title,
         image_url: values.image_url || null,
