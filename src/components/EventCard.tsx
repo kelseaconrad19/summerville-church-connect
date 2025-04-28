@@ -33,6 +33,34 @@ const EventCard = ({ event, onRegister, title, date, time, description, image }:
   
   const formattedTime = event?.time_start || time || "";
 
+  // Format location function
+  const formatLocation = (location: string | any): string => {
+    if (!location) return "Location TBD";
+    
+    // If location is a string, return it directly
+    if (typeof location === 'string' && !location.startsWith('{')) return location;
+    
+    // If it's an object (from AddressAutocomplete) or a JSON string, format it properly
+    try {
+      const locationObj = typeof location === 'string' ? JSON.parse(location) : location;
+      const parts = [];
+      
+      if (locationObj.address1) parts.push(locationObj.address1);
+      if (locationObj.address2) parts.push(locationObj.address2);
+      if (locationObj.city) parts.push(locationObj.city);
+      if (locationObj.state) parts.push(locationObj.state);
+      if (locationObj.postalCode) parts.push(locationObj.postalCode);
+      
+      return parts.length > 0 ? parts.join(', ') : "Location TBD";
+    } catch (e) {
+      // If parsing fails, return the original location string
+      return typeof location === 'string' ? location : "Location TBD";
+    }
+  };
+
+  // Get formatted location
+  const eventLocation = event?.location ? formatLocation(event.location) : "Location TBD";
+
   const handleRegister = async () => {
     if (!user) {
       toast({
@@ -84,6 +112,9 @@ const EventCard = ({ event, onRegister, title, date, time, description, image }:
           {formattedDate} {formattedTime && `• ${formattedTime}`}
         </div>
         <h3 className="text-xl font-bold mb-2">{eventTitle}</h3>
+        {eventLocation !== "Location TBD" && (
+          <div className="text-sm text-gray-500 mb-2">{eventLocation}</div>
+        )}
         <p className="text-gray-600 mb-4">{eventDescription}</p>
         {event?.requires_registration && (
           <Button 

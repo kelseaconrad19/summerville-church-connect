@@ -40,6 +40,31 @@ export function EventCalendar() {
     return format(eventDate, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
   });
 
+  // Function to format the location string from location object
+  const formatLocation = (location: string | any): string => {
+    if (!location) return "Location TBD";
+    
+    // If location is a string, return it directly
+    if (typeof location === 'string') return location;
+    
+    // If it's an object (from AddressAutocomplete), format it properly
+    try {
+      const locationObj = typeof location === 'string' ? JSON.parse(location) : location;
+      const parts = [];
+      
+      if (locationObj.address1) parts.push(locationObj.address1);
+      if (locationObj.address2) parts.push(locationObj.address2);
+      if (locationObj.city) parts.push(locationObj.city);
+      if (locationObj.state) parts.push(locationObj.state);
+      if (locationObj.postalCode) parts.push(locationObj.postalCode);
+      
+      return parts.length > 0 ? parts.join(', ') : "Location TBD";
+    } catch (e) {
+      console.error("Error formatting location:", e);
+      return "Location TBD";
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <Card className="flex-1">
@@ -96,7 +121,7 @@ export function EventCalendar() {
                       <h4 className="font-medium">{event.title}</h4>
                       <p className="text-sm text-muted-foreground mt-1">
                         {event.time_start && `${event.time_start} • `}
-                        {event.location || "Location TBD"}
+                        {formatLocation(event.location)}
                       </p>
                       {event.description && (
                         <p className="mt-2 text-sm">{event.description}</p>
