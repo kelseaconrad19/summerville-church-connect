@@ -1,9 +1,11 @@
+
 import { useAuth } from "@/components/AuthProvider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { registerForEvent } from "@/lib/api/events";
 import type { Event } from "@/lib/types/events";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface EventCardProps {
   event: Event;
@@ -31,6 +33,48 @@ const EventCard = ({ event, onRegister, title, date, time, description, image }:
     : date;
   
   const formattedTime = event?.time_start || time || "";
+
+  // Check if the image URL is valid
+  const isValidImageUrl = (url: string | undefined): boolean => {
+    if (!url) return false;
+    
+    // Check if it's a Google redirect URL and extract the actual image URL
+    if (url.includes('google.com/url')) {
+      try {
+        const urlObj = new URL(url);
+        const actualUrl = urlObj.searchParams.get('url');
+        return !!actualUrl;
+      } catch (e) {
+        return false;
+      }
+    }
+    
+    // Basic URL validation
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  // Get proper image URL or fallback
+  const getImageUrl = (url: string | undefined): string => {
+    if (!url) return 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80';
+    
+    // If it's a Google redirect URL, try to extract the actual URL
+    if (url.includes('google.com/url')) {
+      try {
+        const urlObj = new URL(url);
+        const actualUrl = urlObj.searchParams.get('url');
+        return actualUrl || 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80';
+      } catch (e) {
+        return 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80';
+      }
+    }
+    
+    return url;
+  };
 
   // Format location function
   const formatLocation = (location: string | any): string => {
@@ -112,11 +156,17 @@ const EventCard = ({ event, onRegister, title, date, time, description, image }:
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {eventImage && (
         <div className="h-48 overflow-hidden">
-          <img 
-            src={eventImage} 
-            alt={eventTitle} 
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-          />
+          <AspectRatio ratio={16/9}>
+            <img 
+              src={getImageUrl(eventImage)}
+              alt={eventTitle || "Event"}
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=800&q=80';
+              }}
+            />
+          </AspectRatio>
         </div>
       )}
       <CardContent className="p-6">
