@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AddressAutocomplete from "../AddressAutocomplete";
-import { EventFormData } from "./types";
+import { EventFormData, Address } from "./types";
 
 interface EventBasicInfoProps {
   control: Control<EventFormData>;
@@ -58,7 +58,7 @@ export function EventBasicInfo({ control }: EventBasicInfoProps) {
         render={({ field }) => (
           <FormItem>
             <AddressAutocomplete
-              value={field.value}
+              value={field.value as Address}
               onChange={field.onChange}
             />
             <FormMessage />

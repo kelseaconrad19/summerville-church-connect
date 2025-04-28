@@ -22,7 +22,9 @@ export function EventForm({ onSuccess }: EventFormProps) {
     defaultValues: {
       title: "",
       description: "",
-      location: "",
+      location: {
+        address1: "",
+      },
       date_start: new Date(),
       date_end: new Date(),
       time_start: "09:00",
@@ -34,10 +36,13 @@ export function EventForm({ onSuccess }: EventFormProps) {
 
   const onSubmit = async (data: EventFormData) => {
     try {
+      // Convert Address object to JSON string for storage
+      const locationString = JSON.stringify(data.location);
+      
       const { error } = await supabase.from("events").insert({
         title: data.title,
         description: data.description,
-        location: data.location,
+        location: locationString,
         date_start: new Date(
           `${format(data.date_start, "yyyy-MM-dd")}T${data.time_start}`
         ).toISOString(),

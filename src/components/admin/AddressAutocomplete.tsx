@@ -1,15 +1,8 @@
+
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-interface Address {
-  address1: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  country?: string;
-}
+import { Address } from "./forms/types";
 
 interface AddressAutocompleteProps {
   value: Address;
