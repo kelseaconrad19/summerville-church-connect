@@ -19,6 +19,7 @@ import { AdminLayout } from "./components/admin/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AdminEventsPage from "./pages/admin/EventsPage";
 import AdminMinistriesPage from "./pages/admin/MinistriesPage";
+import AdminSermonsPage from "./pages/admin/SermonsPage";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
               <Route index element={<DashboardPage />} />
               <Route path="events" element={<AdminEventsPage />} />
               <Route path="ministries" element={<AdminMinistriesPage />} />
+              <Route path="sermons" element={<AdminSermonsPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

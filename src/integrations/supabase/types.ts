@@ -176,6 +176,51 @@ export type Database = {
         }
         Relationships: []
       }
+      sermons: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          created_by: string
+          date: string
+          description: string | null
+          id: string
+          is_published: boolean | null
+          series: string | null
+          speaker: string
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          created_by: string
+          date: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          series?: string | null
+          speaker: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          created_by?: string
+          date?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          series?: string | null
+          speaker?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
