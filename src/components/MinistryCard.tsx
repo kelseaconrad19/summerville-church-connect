@@ -9,9 +9,17 @@ interface MinistryCardProps {
   image: string;
   link?: string;
   buttonText?: string;
+  onClick?: () => void;
 }
 
-const MinistryCard = ({ title, description, image, link = "#", buttonText = "Learn More" }: MinistryCardProps) => {
+const MinistryCard = ({ 
+  title, 
+  description, 
+  image, 
+  link = "#", 
+  buttonText = "Learn More",
+  onClick
+}: MinistryCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="h-48 overflow-hidden">
@@ -25,10 +33,15 @@ const MinistryCard = ({ title, description, image, link = "#", buttonText = "Lea
         <h3 className="text-xl font-bold mb-2">{title}</h3>
         <p className="text-gray-600 mb-4">{description}</p>
         <Button 
-          asChild
+          asChild={!onClick}
           className="bg-church-blue hover:bg-blue-500"
+          onClick={onClick}
         >
-          <Link to={link}>{buttonText}</Link>
+          {onClick ? (
+            <span>{buttonText}</span>
+          ) : (
+            <Link to={link}>{buttonText}</Link>
+          )}
         </Button>
       </CardContent>
     </Card>
