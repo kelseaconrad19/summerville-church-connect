@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -99,8 +100,9 @@ export function EventCalendar() {
             modifiersStyles={{
               booked: { 
                 fontWeight: 'bold',
-                backgroundColor: 'var(--church-blue)',
-                color: 'white'
+                backgroundColor: '#33C3F0',
+                color: 'white',
+                border: 'none' 
               }
             }}
           />
