@@ -20,6 +20,7 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import AdminEventsPage from "./pages/admin/EventsPage";
 import AdminMinistriesPage from "./pages/admin/MinistriesPage";
 import AdminSermonsPage from "./pages/admin/SermonsPage";
+import AdminUsersPage from "./pages/admin/UsersPage";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="events" element={<AdminEventsPage />} />
               <Route path="ministries" element={<AdminMinistriesPage />} />
               <Route path="sermons" element={<AdminSermonsPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

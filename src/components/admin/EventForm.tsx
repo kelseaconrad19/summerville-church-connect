@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,14 +10,18 @@ import { EventBasicInfo } from "./forms/EventBasicInfo";
 import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
 import { EventFormData } from "./forms/types";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
+import type { Event } from "@/lib/types/events";
 
 interface EventFormProps {
   onSuccess: () => void;
+  initialData?: Event | null;
 }
 
-export function EventForm({ onSuccess }: EventFormProps) {
+export function EventForm({ onSuccess, initialData }: EventFormProps) {
   const { user } = useAuth();
+  const isEditing = !!initialData;
+  
   const form = useForm<EventFormData>({
     defaultValues: {
       title: "",
@@ -34,12 +38,38 @@ export function EventForm({ onSuccess }: EventFormProps) {
     },
   });
 
+  // Load initial data when editing
+  useEffect(() => {
+    if (initialData) {
+      // Parse the location JSON if it's a string
+      const location = typeof initialData.location === 'string'
+        ? JSON.parse(initialData.location)
+        : initialData.location || { address1: '' };
+        
+      // Format dates and times
+      const startDate = new Date(initialData.date_start);
+      const endDate = new Date(initialData.date_end);
+      
+      form.reset({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        location: location,
+        date_start: startDate,
+        date_end: endDate,
+        time_start: format(startDate, 'HH:mm'),
+        time_end: format(endDate, 'HH:mm'),
+        image_url: initialData.image_url || '',
+        requires_registration: initialData.requires_registration || false,
+      });
+    }
+  }, [initialData, form]);
+
   const onSubmit = async (data: EventFormData) => {
     try {
       // Convert Address object to JSON string for storage
       const locationString = JSON.stringify(data.location);
       
-      const { error } = await supabase.from("events").insert({
+      const eventData = {
         title: data.title,
         description: data.description,
         location: locationString,
@@ -53,17 +83,37 @@ export function EventForm({ onSuccess }: EventFormProps) {
         time_end: data.time_end,
         image_url: data.image_url,
         requires_registration: data.requires_registration,
-        created_by: user?.id,
-      });
+      };
 
-      if (error) throw error;
+      let response;
+      
+      if (isEditing && initialData) {
+        // Update existing event
+        response = await supabase
+          .from("events")
+          .update(eventData)
+          .eq("id", initialData.id);
+          
+        if (response.error) throw response.error;
+        toast.success("Event updated successfully");
+      } else {
+        // Create new event
+        response = await supabase
+          .from("events")
+          .insert({
+            ...eventData,
+            created_by: user?.id,
+          });
+          
+        if (response.error) throw response.error;
+        toast.success("Event created successfully");
+      }
 
-      toast.success("Event created successfully");
       form.reset();
       onSuccess();
     } catch (error) {
-      console.error("Error creating event:", error);
-      toast.error("Failed to create event");
+      console.error("Error saving event:", error);
+      toast.error("Failed to save event");
     }
   };
 
@@ -76,7 +126,7 @@ export function EventForm({ onSuccess }: EventFormProps) {
           <EventAdditionalInfo control={form.control} />
           
           <div className="flex justify-end space-x-2 pt-4">
-            <Button type="submit">Create Event</Button>
+            <Button type="submit">{isEditing ? 'Update Event' : 'Create Event'}</Button>
           </div>
         </form>
       </Form>

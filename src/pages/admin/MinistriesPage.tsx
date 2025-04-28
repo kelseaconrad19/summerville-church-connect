@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Plus } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,6 +10,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Table,
   TableBody,
@@ -25,6 +35,10 @@ import { toast } from 'sonner';
 
 export default function AdminMinistriesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [editingMinistry, setEditingMinistry] = useState<Ministry | null>(null);
+  const [deletingMinistryId, setDeletingMinistryId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data: ministries, refetch } = useQuery({
     queryKey: ['admin-ministries'],
@@ -51,7 +65,45 @@ export default function AdminMinistriesPage() {
 
   const handleMinistryCreated = () => {
     setIsDialogOpen(false);
+    setEditingMinistry(null);
     refetch();
+  };
+
+  const handleEdit = (ministry: Ministry) => {
+    setEditingMinistry(ministry);
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    setDeletingMinistryId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingMinistryId) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from('ministries')
+        .delete()
+        .eq('id', deletingMinistryId);
+
+      if (error) {
+        console.error("Error deleting ministry:", error);
+        toast.error("Failed to delete ministry");
+        throw error;
+      }
+      
+      toast.success("Ministry deleted successfully");
+      await refetch();
+    } catch (error) {
+      console.error("Error deleting ministry:", error);
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingMinistryId(null);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,9 +122,12 @@ export default function AdminMinistriesPage() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[700px] max-h-[85vh]">
             <DialogHeader>
-              <DialogTitle>Create New Ministry</DialogTitle>
+              <DialogTitle>{editingMinistry ? 'Edit Ministry' : 'Create New Ministry'}</DialogTitle>
             </DialogHeader>
-            <MinistryForm onSuccess={handleMinistryCreated} />
+            <MinistryForm 
+              onSuccess={handleMinistryCreated}
+              initialData={editingMinistry}
+            />
           </DialogContent>
         </Dialog>
       </div>
@@ -103,13 +158,23 @@ export default function AdminMinistriesPage() {
                   </TableCell>
                   <TableCell>{ministry.contact_email}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toast.info("Edit feature coming soon")}
-                    >
-                      Edit
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(ministry)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        onClick={() => handleDelete(ministry.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -117,6 +182,23 @@ export default function AdminMinistriesPage() {
           </TableBody>
         </Table>
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Ministry</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this ministry? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

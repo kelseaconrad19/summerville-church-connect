@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -20,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { MinistryFormValues } from '@/lib/types/ministries';
+import type { MinistryFormValues, Ministry } from '@/lib/types/ministries';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -35,17 +36,18 @@ const formSchema = z.object({
 });
 
 interface MinistryFormProps {
-  initialData?: MinistryFormValues;
+  initialData?: Ministry | null;
   onSuccess?: () => void;
 }
 
 export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = React.useState(false);
+  const isEditing = !!initialData;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
+    defaultValues: {
       title: '',
       image_url: '',
       contact_first_name: '',
@@ -58,9 +60,35 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
     },
   });
 
+  // Load initial data when editing
+  useEffect(() => {
+    if (initialData) {
+      // Handle arrays properly
+      const involvementWays = Array.isArray(initialData.involvement_ways) 
+        ? initialData.involvement_ways 
+        : [];
+        
+      const activities = Array.isArray(initialData.activities)
+        ? [...initialData.activities, ...Array(4 - initialData.activities.length).fill('')]
+        : ['', '', '', ''];
+        
+      form.reset({
+        title: initialData.title || '',
+        image_url: initialData.image_url || '',
+        contact_first_name: initialData.contact_first_name || '',
+        contact_last_name: initialData.contact_last_name || '',
+        contact_email: initialData.contact_email || '',
+        description: initialData.description || '',
+        involvement_description: initialData.involvement_description || '',
+        involvement_ways: involvementWays.length ? involvementWays : [''],
+        activities: activities.slice(0, 4),
+      });
+    }
+  }, [initialData, form]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!user) {
-      toast.error('You must be logged in to create a ministry');
+      toast.error('You must be logged in to manage ministries');
       return;
     }
 
@@ -75,27 +103,45 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
         description: values.description,
         involvement_description: values.involvement_description || null,
         involvement_ways: values.involvement_ways.filter(way => way.trim() !== ''),
-        activities: values.activities.filter(activity => activity.trim() !== ''),
-        created_by: user.id
+        activities: values.activities.filter(activity => activity.trim() !== '')
       };
 
-      const { data, error } = await supabase
-        .from('ministries')
-        .insert(ministryData)
-        .select()
-        .single();
+      if (isEditing && initialData) {
+        // Update existing ministry
+        const { error } = await supabase
+          .from('ministries')
+          .update(ministryData)
+          .eq('id', initialData.id);
 
-      if (error) {
-        console.error('Error creating ministry:', error);
-        toast.error('Failed to create ministry');
-        throw error;
+        if (error) {
+          console.error('Error updating ministry:', error);
+          toast.error('Failed to update ministry');
+          throw error;
+        }
+
+        toast.success('Ministry updated successfully');
+      } else {
+        // Create new ministry
+        const { error } = await supabase
+          .from('ministries')
+          .insert({
+            ...ministryData,
+            created_by: user.id
+          });
+
+        if (error) {
+          console.error('Error creating ministry:', error);
+          toast.error('Failed to create ministry');
+          throw error;
+        }
+
+        toast.success('Ministry created successfully');
       }
 
-      toast.success('Ministry created successfully');
       form.reset();
       onSuccess?.();
     } catch (error) {
-      console.error('Exception creating ministry:', error);
+      console.error('Exception in ministry operation:', error);
     } finally {
       setIsLoading(false);
     }
@@ -320,7 +366,7 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
             className="w-full" 
             disabled={isLoading}
           >
-            {isLoading ? 'Creating...' : 'Create Ministry'}
+            {isLoading ? (isEditing ? 'Updating...' : 'Creating...') : (isEditing ? 'Update Ministry' : 'Create Ministry')}
           </Button>
         </form>
       </Form>
