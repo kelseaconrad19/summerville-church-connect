@@ -23,7 +23,7 @@ import type { MinistryFormValues } from '@/lib/types/ministries';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  image_url: z.string().optional(),
+  image_url: z.string().default(''),
   contact_first_name: z.string().min(1, 'First name is required'),
   contact_last_name: z.string().min(1, 'Last name is required'),
   contact_email: z.string().email('Invalid email address'),
@@ -59,12 +59,20 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
 
     setIsLoading(true);
     try {
+      // Make sure all required fields are properly set
+      const ministryData = {
+        title: values.title,
+        image_url: values.image_url || null,
+        contact_first_name: values.contact_first_name,
+        contact_last_name: values.contact_last_name,
+        contact_email: values.contact_email,
+        description: values.description,
+        created_by: user.id
+      };
+
       const { data, error } = await supabase
         .from('ministries')
-        .insert({
-          ...values,
-          created_by: user.id,
-        })
+        .insert(ministryData)
         .select()
         .single();
 
@@ -111,6 +119,7 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
                 <ImageUpload 
                   value={field.value} 
                   onChange={field.onChange}
+                  bucket="ministry_images"
                 />
               </FormControl>
               <FormDescription>
