@@ -68,7 +68,7 @@ export default function AdminMinistriesPage() {
               Add New Ministry
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[700px] max-h-[85vh]">
             <DialogHeader>
               <DialogTitle>Create New Ministry</DialogTitle>
             </DialogHeader>
