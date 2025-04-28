@@ -14,10 +14,10 @@ import React from "react";
 export const navItems = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about", children: [
+    { name: "Sermons", path: "/sermons" },
     { name: "Events", path: "/events" },
     { name: "Ministries", path: "/ministries" },
   ]},
-  { name: "Sermons", path: "/sermons" },
   { name: "Prayer Requests", path: "/prayer-request" },
   { name: "Contact", path: "/contact" },
 ];
