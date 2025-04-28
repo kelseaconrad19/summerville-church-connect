@@ -8,9 +8,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { EventFormData } from "./types";
+import { ImageUpload } from "../ImageUpload";
 
 interface EventAdditionalInfoProps {
   control: Control<EventFormData>;
@@ -24,9 +24,12 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
         name="image_url"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Image URL</FormLabel>
+            <FormLabel>Event Image</FormLabel>
             <FormControl>
-              <Input placeholder="Enter image URL" {...field} />
+              <ImageUpload 
+                value={field.value} 
+                onChange={field.onChange} 
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
