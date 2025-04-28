@@ -99,10 +99,10 @@ export function EventCalendar() {
             }}
             modifiersStyles={{
               booked: { 
-                fontWeight: 'bold',
-                backgroundColor: '#33C3F0',
-                color: 'white',
-                border: 'none' 
+                fontWeight: 'normal',
+                backgroundColor: 'white',
+                color: 'black',
+                border: '2px solid #33C3F0'
               }
             }}
           />
