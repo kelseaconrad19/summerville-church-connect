@@ -134,7 +134,7 @@ export function ClassFormDialog({
         
         <ScrollArea className="max-h-[70vh] px-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pr-4 pl-4">
               <BasicInfoFields control={form.control} />
               <DateFields control={form.control} />
               <MinistryField control={form.control} />
