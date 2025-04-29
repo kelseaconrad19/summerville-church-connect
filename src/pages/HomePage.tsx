@@ -134,13 +134,6 @@ const HomePage = () => {
       {/* Latest Sermons */}
       <section className="section-padding bg-white">
         <div className="page-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Latest Sermons</h2>
-            <div className="w-20 h-1 bg-church-blue mx-auto mb-6"></div>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
-              Listen to recent messages from our services and grow in your faith journey.
-            </p>
-          </div>
           
           <LatestSermons />
           
