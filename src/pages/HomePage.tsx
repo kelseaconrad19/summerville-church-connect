@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ServiceTimes from "@/components/ServiceTimes";
@@ -134,7 +133,6 @@ const HomePage = () => {
       {/* Latest Sermons */}
       <section className="section-padding bg-white">
         <div className="page-container">
-          
           <LatestSermons />
           
           <div className="text-center mt-10">
