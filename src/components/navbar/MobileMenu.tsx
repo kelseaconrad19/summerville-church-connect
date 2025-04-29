@@ -83,8 +83,8 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
           className={cn(
             "block px-3 py-2 rounded-md text-base font-medium",
             pathname === "/prayer-request"
-              ? "bg-blue-50 text-blue-600"
-              : "text-blue-600 hover:bg-blue-50"
+              ? "bg-church-light-blue text-church-blue"
+              : "text-church-blue hover:bg-church-light-blue"
           )}
           onClick={onClose}
         >
@@ -96,14 +96,15 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
           className={cn(
             "block px-3 py-2 rounded-md text-base font-medium",
             pathname === "/contact"
-              ? "bg-amber-50 text-amber-600"
-              : "text-amber-600 hover:bg-amber-50"
+              ? "bg-church-light-blue text-church-blue"
+              : "text-church-blue hover:bg-church-light-blue"
           )}
           onClick={onClose}
         >
           Contact
         </Link>
         
+        {/* User menu options */}
         {user ? (
           <>
             {isAdmin && (
@@ -152,14 +153,6 @@ export function MobileMenu({ isOpen, onClose, onLogout }: MobileMenuProps) {
             Admin Login
           </Button>
         )}
-        
-        <div className="mt-4 px-3">
-          <Button asChild className="w-full bg-church-blue hover:bg-blue-500">
-            <Link to="/about#visit" onClick={onClose}>
-              Plan Your Visit
-            </Link>
-          </Button>
-        </div>
       </div>
     </div>
   );

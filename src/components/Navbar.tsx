@@ -41,16 +41,13 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-3 items-center">
             <NavLinks />
-            <Button asChild variant="secondary" className="font-medium text-blue-600 hover:bg-blue-50">
+            <Button asChild variant="secondary" className="font-medium text-church-blue hover:bg-church-light-blue">
               <Link to="/prayer-request">Prayer Request</Link>
             </Button>
-            <Button asChild variant="outline" className="font-medium text-amber-600 border-amber-200 bg-amber-50 hover:bg-amber-100">
+            <Button asChild className="font-medium text-white bg-church-blue hover:bg-blue-500">
               <Link to="/contact">Contact</Link>
             </Button>
             <UserMenu />
-            <Button asChild className="ml-1 bg-church-blue hover:bg-blue-500">
-              <Link to="/about#visit">Plan Your Visit</Link>
-            </Button>
           </nav>
           
           {/* Mobile menu button */}
