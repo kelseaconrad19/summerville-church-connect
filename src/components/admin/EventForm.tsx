@@ -10,7 +10,7 @@ import { EventBasicInfo } from "./forms/EventBasicInfo";
 import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
 import { EventFormData } from "./forms/types";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
 
 interface EventFormProps {
@@ -37,6 +37,8 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       requires_registration: false,
       church_center_url: "",
       event_type: "upcoming",
+      location_type: "church",
+      church_location: "",
     },
   });
 
@@ -48,6 +50,10 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         ? JSON.parse(initialData.location)
         : initialData.location || { address1: '' };
         
+      // Determine if this is a church location
+      const isChurchLocation = location.isChurchLocation === true;
+      const churchLocation = isChurchLocation ? location.churchLocation || "" : "";
+      
       // Format dates and times
       const startDate = new Date(initialData.date_start);
       const endDate = new Date(initialData.date_end);
@@ -72,14 +78,35 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: initialData.requires_registration || false,
         church_center_url: initialData.church_center_url || '',
         event_type: eventType,
+        location_type: isChurchLocation ? "church" : "other",
+        church_location: churchLocation,
       });
     }
   }, [initialData, form]);
 
   const onSubmit = async (data: EventFormData) => {
     try {
-      // Convert Address object to JSON string for storage
-      const locationString = JSON.stringify(data.location);
+      // Prepare location data based on location type
+      let locationData;
+      if (data.location_type === "church") {
+        locationData = {
+          isChurchLocation: true,
+          churchLocation: data.church_location || "Main Sanctuary",
+          address1: "413 Old Trolley Rd.", // Using the church address from the events data
+          city: "Summerville",
+          state: "SC",
+          postalCode: "29485",
+          country: "United States"
+        };
+      } else {
+        locationData = {
+          ...data.location,
+          isChurchLocation: false
+        };
+      }
+      
+      // Convert location object to JSON string for storage
+      const locationString = JSON.stringify(locationData);
       
       // Determine is_recurring based on event_type
       const isRecurring = data.event_type === "recurring";

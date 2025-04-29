@@ -1,3 +1,13 @@
+export interface Address {
+  address1: string;
+  address2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
+export type LocationType = "church" | "other";
 
 export interface EventFormData {
   title: string;
@@ -9,16 +19,8 @@ export interface EventFormData {
   time_end: string;
   image_url: string;
   requires_registration: boolean;
-  church_center_url?: string;
-  event_type?: "upcoming" | "ended" | "recurring";
-  is_recurring?: boolean;
-}
-
-export interface Address {
-  address1: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  country?: string;
+  church_center_url: string;
+  event_type: "upcoming" | "ended" | "recurring";
+  location_type: LocationType;
+  church_location?: string;
 }
