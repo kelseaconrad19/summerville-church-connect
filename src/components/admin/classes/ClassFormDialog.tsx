@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -78,8 +79,6 @@ export function ClassFormDialog({
   });
 
   // Reset form when dialog opens/closes or when editing class changes
-  // The issue is here - useState doesn't take two arguments
-  // Changing to use React.useEffect instead
   useEffect(() => {
     if (open) {
       if (editingClass) {
@@ -120,7 +119,7 @@ export function ClassFormDialog({
         description: data.description,
         location: data.location,
         time: data.time,
-        ministry_id: data.ministry_id,
+        ministry_id: data.ministry_id === "none" ? null : data.ministry_id,
         image_url: data.image_url,
         start_date: data.start_date ? format(data.start_date, 'yyyy-MM-dd') : null,
         end_date: data.end_date ? format(data.end_date, 'yyyy-MM-dd') : null
@@ -283,7 +282,7 @@ export function ClassFormDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">None</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
                       {ministries.map((ministry) => (
                         <SelectItem key={ministry.id} value={ministry.id}>
                           {ministry.title}
