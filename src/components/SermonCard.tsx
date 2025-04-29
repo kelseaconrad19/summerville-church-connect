@@ -27,7 +27,7 @@ const SermonCard = ({ title, speaker, date, description, videoUrl, audioUrl }: S
             <Button 
               className="bg-church-blue hover:bg-blue-500"
             >
-              Watch
+              <a href={videoUrl}>Watch</a>
             </Button>
           )}
           {audioUrl && (
