@@ -9,7 +9,7 @@ export const leadershipSchema = z.object({
   }),
   ministry: z.string().optional().nullable(),
   bio: z.string().optional().nullable().default(""),
-  email: z.string().email().optional().nullable(),
+  email: z.string().optional().nullable().or(z.string().email("Invalid email format")),
   image_url: z.string().nullable().optional(),
   display_order: z.number().optional().nullable(),
 });
