@@ -24,7 +24,7 @@ import { Switch } from "@/components/ui/switch";
 
 interface SermonFormProps {
   onSuccess: () => void;
-  initialData?: any;
+  initialData?: unknown;
 }
 
 export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
@@ -93,7 +93,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
 
   return (
     <ScrollArea className="max-h-[70vh] px-2">
-      <div className="pr-4">
+      <div className="pr-4 pl-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

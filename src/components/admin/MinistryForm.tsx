@@ -163,8 +163,8 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
   };
 
   return (
-    <ScrollArea className="h-[70vh] px-6">
-      <div className="pr-6 pb-6">
+    <ScrollArea className="h-[70vh] px-4">
+      <div className="pr-4 pl-4 pb-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
