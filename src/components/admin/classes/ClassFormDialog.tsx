@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -133,7 +132,7 @@ export function ClassFormDialog({
           <DialogTitle>{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
         </DialogHeader>
         
-        <ScrollArea className="max-h-[70vh] pr-4">
+        <ScrollArea className="max-h-[70vh] px-1">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <BasicInfoFields control={form.control} />
