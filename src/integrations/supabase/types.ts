@@ -9,6 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      classes: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          location: string
+          ministry_id: string | null
+          teacher: string
+          time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          location: string
+          ministry_id?: string | null
+          teacher: string
+          time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string
+          ministry_id?: string | null
+          teacher?: string
+          time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classes_ministry_id_fkey"
+            columns: ["ministry_id"]
+            isOneToOne: false
+            referencedRelation: "ministries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           church_center_url: string | null

@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
@@ -17,6 +18,7 @@ export const navItems = [
     { name: "Sermons", path: "/sermons" },
     { name: "Events", path: "/events" },
     { name: "Ministries", path: "/ministries" },
+    { name: "Classes", path: "/classes" },
   ]},
   { name: "Prayer Requests", path: "/prayer-request" },
   { name: "Contact", path: "/contact" },

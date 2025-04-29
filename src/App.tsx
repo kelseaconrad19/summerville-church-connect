@@ -15,6 +15,7 @@ import PrayerRequestPage from "./pages/PrayerRequestPage";
 import ContactPage from "./pages/ContactPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import ClassesPage from "./pages/ClassesPage";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AdminEventsPage from "./pages/admin/EventsPage";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/sermons" element={<SermonsPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/ministries" element={<MinistriesPage />} />
+              <Route path="/classes" element={<ClassesPage />} />
               <Route path="/prayer-request" element={<PrayerRequestPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/auth" element={<AuthPage />} />
