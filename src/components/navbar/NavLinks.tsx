@@ -15,6 +15,7 @@ import React from "react";
 export const navItems = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about", children: [
+    { name: "Leadership", path: "/leadership" },
     { name: "Ministries", path: "/ministries" },
     { name: "Current Classes", path: "/classes" },
   ]},

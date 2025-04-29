@@ -8,6 +8,7 @@ import { AuthProvider } from "./components/AuthProvider";
 import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
+import LeadershipPage from "./pages/LeadershipPage";
 import SermonsPage from "./pages/SermonsPage";
 import EventsPage from "./pages/EventsPage";
 import MinistriesPage from "./pages/MinistriesPage";
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/leadership" element={<LeadershipPage />} />
               <Route path="/sermons" element={<SermonsPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/ministries" element={<MinistriesPage />} />
