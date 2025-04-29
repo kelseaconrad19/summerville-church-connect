@@ -28,7 +28,7 @@ export default function AdminLeadershipPage() {
         throw error;
       }
 
-      return data || [];
+      return data as LeadershipMember[] || [];
     }
   });
 

@@ -21,10 +21,13 @@ const LeadershipPage = () => {
         return { leadershipTeam: [], shepherds: [], deacons: [] };
       }
 
+      // Cast data to LeadershipMember[] to ensure type safety
+      const typedData = data as LeadershipMember[];
+
       return {
-        leadershipTeam: data.filter(item => item.role === "Leadership Team") || [],
-        shepherds: data.filter(item => item.role === "Shepherd") || [],
-        deacons: data.filter(item => item.role === "Deacon") || [],
+        leadershipTeam: typedData.filter(item => item.role === "Leadership Team") || [],
+        shepherds: typedData.filter(item => item.role === "Shepherd") || [],
+        deacons: typedData.filter(item => item.role === "Deacon") || [],
       };
     },
     initialData: { 

@@ -157,6 +157,42 @@ export type Database = {
           },
         ]
       }
+      leadership: {
+        Row: {
+          bio: string
+          created_at: string
+          email: string | null
+          id: string
+          image_url: string | null
+          ministry: string | null
+          name: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          bio: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          ministry?: string | null
+          name: string
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          image_url?: string | null
+          ministry?: string | null
+          name?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ministries: {
         Row: {
           activities: Json | null
