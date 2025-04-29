@@ -8,7 +8,7 @@ export const leadershipSchema = z.object({
     required_error: "Please select a role",
   }),
   ministry: z.string().optional().nullable(),
-  bio: z.string().min(1, { message: "Bio is required" }),
+  bio: z.string().optional().nullable().default(""),
   email: z.string().email().optional().nullable(),
   image_url: z.string().nullable().optional(),
   display_order: z.number().optional().nullable(),

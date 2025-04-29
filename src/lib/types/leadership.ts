@@ -6,7 +6,7 @@ export interface LeadershipMember {
   name: string;
   role: LeadershipRole;
   ministry?: string | null;
-  bio: string;
+  bio?: string | null;
   image_url: string | null;
   email?: string | null;
   display_order?: number | null;

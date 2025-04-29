@@ -52,7 +52,7 @@ export function LeadershipFormDialog({
           name: member.name,
           role: member.role,
           ministry: member.ministry || "",
-          bio: member.bio,
+          bio: member.bio || "",
           email: member.email || "",
           image_url: member.image_url,
           display_order: member.display_order || 100
@@ -79,7 +79,7 @@ export function LeadershipFormDialog({
         name: data.name,
         role: data.role,
         ministry: data.ministry || null,
-        bio: data.bio,
+        bio: data.bio || "",
         email: data.email || null,
         image_url: data.image_url || null,
         display_order: data.display_order || 100
@@ -224,12 +224,13 @@ export function LeadershipFormDialog({
                 name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bio</FormLabel>
+                    <FormLabel>Bio (Optional)</FormLabel>
                     <FormControl>
                       <Textarea 
                         placeholder="Tell us about this person..." 
                         className="min-h-[120px]" 
                         {...field} 
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormMessage />
