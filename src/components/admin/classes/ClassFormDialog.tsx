@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
@@ -127,25 +128,27 @@ export function ClassFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
         </DialogHeader>
         
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <BasicInfoFields control={form.control} />
-            <DateFields control={form.control} />
-            <MinistryField control={form.control} />
-            <DescriptionField control={form.control} />
-            <ImageField control={form.control} />
-            <FormActions 
-              isSubmitting={isSubmitting} 
-              onCancel={handleCancel}
-              isEditing={!!editingClass}
-            />
-          </form>
-        </Form>
+        <ScrollArea className="max-h-[70vh] pr-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <BasicInfoFields control={form.control} />
+              <DateFields control={form.control} />
+              <MinistryField control={form.control} />
+              <DescriptionField control={form.control} />
+              <ImageField control={form.control} />
+              <FormActions 
+                isSubmitting={isSubmitting} 
+                onCancel={handleCancel}
+                isEditing={!!editingClass}
+              />
+            </form>
+          </Form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
