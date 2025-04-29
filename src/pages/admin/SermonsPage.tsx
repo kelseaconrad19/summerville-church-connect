@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SermonsTable } from "@/components/admin/sermons/SermonsTable";
@@ -98,12 +97,10 @@ export default function AdminSermonsPage() {
           editingSermon={editingSermon}
           onSuccess={handleSermonCreated}
         />
-        <DialogTrigger asChild>
-          <Button onClick={() => setIsDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Sermon
-          </Button>
-        </DialogTrigger>
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add New Sermon
+        </Button>
       </div>
 
       <SermonsTable 
