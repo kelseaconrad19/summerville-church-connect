@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Edit, Trash2, FileText } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -33,11 +32,12 @@ import { toast } from "sonner";
 import { SermonForm } from "@/components/admin/SermonForm";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { SermonFormData } from "@/components/admin/forms/types";
 
 export default function AdminSermonsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [editingSermon, setEditingSermon] = useState<any>(null);
+  const [editingSermon, setEditingSermon] = useState<SermonFormData | null>(null);
   const [deletingSermonId, setDeletingSermonId] = useState<string | null>(null);
 
   const { data: sermons = [], refetch } = useQuery({

@@ -1,3 +1,4 @@
+
 export interface Address {
   address1: string;
   address2?: string;
@@ -23,4 +24,16 @@ export interface EventFormData {
   event_type: "upcoming" | "ended" | "recurring";
   location_type: LocationType;
   church_location?: string;
+}
+
+export interface SermonFormData {
+  id?: string;
+  title: string;
+  speaker: string;
+  date: Date;
+  description: string;
+  series: string;
+  video_url: string;
+  audio_url: string;
+  is_published: boolean;
 }

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -21,10 +22,11 @@ import {
 } from "@/components/ui/form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
+import { SermonFormData } from "./forms/types";
 
 interface SermonFormProps {
   onSuccess: () => void;
-  initialData?: unknown;
+  initialData?: SermonFormData;
 }
 
 export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
@@ -32,7 +34,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!initialData;
 
-  const form = useForm({
+  const form = useForm<SermonFormData>({
     defaultValues: initialData || {
       title: "",
       speaker: "",
@@ -45,7 +47,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
     }
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: SermonFormData) => {
     if (!user) {
       toast.error("You must be logged in to create sermons");
       return;
@@ -62,7 +64,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
 
       let result;
       
-      if (isEditing) {
+      if (isEditing && initialData?.id) {
         // Update existing sermon
         result = await supabase
           .from("sermons")
