@@ -36,6 +36,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       image_url: "",
       requires_registration: false,
       church_center_url: "",
+      event_type: "upcoming",
     },
   });
 
@@ -51,6 +52,14 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       const startDate = new Date(initialData.date_start);
       const endDate = new Date(initialData.date_end);
       
+      // Determine event type
+      let eventType: "upcoming" | "ended" | "recurring" = "upcoming";
+      if (initialData.is_recurring) {
+        eventType = "recurring";
+      } else if (new Date() > endDate) {
+        eventType = "ended";
+      }
+
       form.reset({
         title: initialData.title || '',
         description: initialData.description || '',
@@ -62,6 +71,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         image_url: initialData.image_url || '',
         requires_registration: initialData.requires_registration || false,
         church_center_url: initialData.church_center_url || '',
+        event_type: eventType,
       });
     }
   }, [initialData, form]);
@@ -70,6 +80,9 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
     try {
       // Convert Address object to JSON string for storage
       const locationString = JSON.stringify(data.location);
+      
+      // Determine is_recurring based on event_type
+      const isRecurring = data.event_type === "recurring";
       
       const eventData = {
         title: data.title,
@@ -86,6 +99,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         image_url: data.image_url,
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
+        is_recurring: isRecurring,
       };
 
       let response;
