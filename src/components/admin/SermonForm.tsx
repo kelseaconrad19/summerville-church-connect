@@ -86,7 +86,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
       
       form.reset();
       onSuccess();
-    } catch (error: SermonError) {
+    } catch (error) {
       console.error("Error saving sermon:", error);
       toast.error(`Error: ${error.message || "Failed to save sermon"}`);
     } finally {
