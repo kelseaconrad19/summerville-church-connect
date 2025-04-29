@@ -115,7 +115,7 @@ export function ClassFormDialog({
       }
       
       onSuccess();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving class:', error);
       toast.error(`Failed to save class: ${error.message}`);
     } finally {

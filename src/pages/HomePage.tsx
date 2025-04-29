@@ -17,9 +17,12 @@ const HomePage = () => {
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-              Welcome to Summerville Church of Christ
+              RELATIONSHIPS Formed
+            </h1>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
+              FAITH Strengthened
             </h1>
             <p className="text-xl sm:text-2xl text-white mb-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
               A community of faith sharing God's love in Summerville
@@ -43,49 +46,32 @@ const HomePage = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Mission</h2>
             <div className="w-20 h-1 bg-church-blue mx-auto mb-6"></div>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              We exist to glorify God by making disciples who love God, grow in community, 
-              and serve our city. Join us as we seek to share the transformative message of 
-              Jesus Christ with our community and beyond.
+              We are a growing community of believers who value our brokenness as the foundation for our relationship with Christ and one another, owning our individual spiritual growth through personal discipline.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
             <div className="text-center p-6 rounded-lg bg-church-light-blue">
               <div className="bg-white p-4 inline-block rounded-full mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-10 w-10 text-church-blue">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4 4 0 000 6.364L12 20.364l7.682-7.682a4 4 0 00-6.364-6.364L12 7.636l-1.318-1.318a4 4 0 00-6.364 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Love God</h3>
+              <h3 className="text-xl font-bold mb-2">RELATIONSHIPS Formed</h3>
               <p className="text-gray-700">
-                We worship together and grow in our relationship with God through prayer, 
-                Bible study, and fellowship.
+              We all have individual stories of brokenness. Sharing these stories lays the foundation for our depth  of relationship with Christ and one another.
               </p>
             </div>
             
             <div className="text-center p-6 rounded-lg bg-church-green">
               <div className="bg-white p-4 inline-block rounded-full mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-10 w-10 text-church-blue">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4 4 0 000 6.364L12 20.364l7.682-7.682a4 4 0 00-6.364-6.364L12 7.636l-1.318-1.318a4 4 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-2">Grow in Community</h3>
+              <h3 className="text-xl font-bold mb-2">FAITH Strengthened</h3>
               <p className="text-gray-700">
-                We build meaningful relationships through small groups, fellowship events, 
-                and serving alongside one another.
-              </p>
-            </div>
-            
-            <div className="text-center p-6 rounded-lg bg-church-light-blue">
-              <div className="bg-white p-4 inline-block rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-10 w-10 text-church-blue">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 019-9m0 18c-1.657 0-3-4.03-3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s-1.343-9-3-9m-9 9a9 9 0 019-9" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-2">Serve Our City</h3>
-              <p className="text-gray-700">
-                We demonstrate Christ's love through outreach programs, missions, and 
-                community service initiatives.
+              We own our own personal spiritual growth. Taking ownership of our faith means engaging in spiritual discipline with people who do not look and think exactly like us.
               </p>
             </div>
           </div>
@@ -123,7 +109,7 @@ const HomePage = () => {
                 ></iframe>
               </div>
               <p className="text-center mt-4 text-gray-700">
-                <strong>123 Main Street, Summerville, SC 29483</strong>
+                <strong>413 Old Trolley Rd, Summerville, SC 29485</strong>
               </p>
             </div>
           </div>

@@ -182,7 +182,7 @@ const SermonsPage = () => {
             <>
               {/* Sermon List */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredSermons.map((sermon: any) => (
+                {filteredSermons.map((sermon: Sermon) => (
                   <SermonCard
                     key={sermon.id}
                     title={sermon.title}
