@@ -1,14 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ServiceTimes from "@/components/ServiceTimes";
-import EventCard from "@/components/EventCard";
-import MinistryCard from "@/components/MinistryCard";
 import EventCards from "@/components/EventCards";
-import MinistryCards from "@/components/MinistryCards";
-import { supabase } from "@/integrations/supabase/client";
-import { Sermon } from "@/lib/types/sermons";
-import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
+import LatestSermons from "@/components/LatestSermons";
 
 const HomePage = () => {
   return (
@@ -136,8 +131,29 @@ const HomePage = () => {
         </div>
       </section>
       
-      {/* Upcoming Events */}
+      {/* Latest Sermons */}
       <section className="section-padding bg-white">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Latest Sermons</h2>
+            <div className="w-20 h-1 bg-church-blue mx-auto mb-6"></div>
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+              Listen to recent messages from our services and grow in your faith journey.
+            </p>
+          </div>
+          
+          <LatestSermons />
+          
+          <div className="text-center mt-10">
+            <Button asChild className="bg-church-blue hover:bg-blue-500">
+              <Link to="/sermons">View All Sermons</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+      
+      {/* Upcoming Events */}
+      <section className="section-padding bg-gray-50">
         <div className="page-container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Upcoming Events</h2>
@@ -154,27 +170,6 @@ const HomePage = () => {
           <div className="text-center mt-10">
             <Button asChild className="bg-church-blue hover:bg-blue-500">
               <Link to="/events">View All Events</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-      
-      {/* Featured Ministries */}
-      <section className="section-padding bg-gray-50">
-        <div className="page-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Ministries</h2>
-            <div className="w-20 h-1 bg-church-blue mx-auto mb-6"></div>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-              We offer many ways to connect, serve, and grow in your faith journey.
-            </p>
-          </div>
-          
-          <MinistryCards />
-          
-          <div className="text-center mt-10">
-            <Button asChild className="bg-church-blue hover:bg-blue-500">
-              <Link to="/ministries">Explore All Ministries</Link>
             </Button>
           </div>
         </div>
@@ -209,4 +204,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
