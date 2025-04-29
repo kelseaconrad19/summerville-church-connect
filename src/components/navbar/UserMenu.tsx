@@ -29,14 +29,6 @@ export function UserMenu() {
           <LayoutDashboard className="h-4 w-4" />
           Admin
         </Button>
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2"
-          onClick={() => navigate("/profile")}
-        >
-          <User className="h-4 w-4" />
-          Profile
-        </Button>
         <Button variant="outline" onClick={handleLogout}>
           Sign out
         </Button>
