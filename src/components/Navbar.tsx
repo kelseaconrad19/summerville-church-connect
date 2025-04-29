@@ -41,10 +41,10 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-3 items-center">
             <NavLinks />
-            <Button asChild variant="secondary" className="font-medium text-church-blue hover:bg-church-light-blue">
-              <Link to="/prayer-request">Prayer Request</Link>
+            <Button asChild variant="secondary" className="font-medium text-church-blue bg-white border-2 border-church-blue hover:bg-church-blue hover:text-white">
+              <Link to="/prayer-request">Prayer Requests</Link>
             </Button>
-            <Button asChild className="font-medium text-white bg-church-blue hover:bg-blue-500">
+            <Button asChild className="font-medium text-white bg-church-blue hover:bg-white hover:text-church-blue">
               <Link to="/contact">Contact</Link>
             </Button>
             <UserMenu />
