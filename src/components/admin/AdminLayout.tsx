@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { LayoutDashboard, CalendarDays, Users, LogOut, Church, FileText, BookOpen } from "lucide-react";
+import { LayoutDashboard, CalendarDays, Users, LogOut, Church, FileText, BookOpen, UserPlus } from "lucide-react";
 import { useAdmin } from "@/hooks/use-admin";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,6 +102,14 @@ export function AdminLayout() {
                   <a href="/admin/ministries" className="w-full">
                     <Church className="h-4 w-4" />
                     <span>Ministries</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href="/admin/leadership" className="w-full">
+                    <UserPlus className="h-4 w-4" />
+                    <span>Leadership</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
