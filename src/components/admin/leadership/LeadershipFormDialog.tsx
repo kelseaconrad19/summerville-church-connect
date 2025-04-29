@@ -1,37 +1,20 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { LeadershipMember, LeadershipRole } from "@/lib/types/leadership";
-import { toast } from "sonner";
-import { ImageUpload } from "@/components/admin/ImageUpload";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { LeadershipMember } from "@/lib/types/leadership";
+import { leadershipSchema, LeadershipFormValues } from "./LeadershipFormSchema";
+import { ImageField } from "./ImageField";
 
 interface LeadershipFormDialogProps {
   open: boolean;
@@ -40,255 +23,230 @@ interface LeadershipFormDialogProps {
   onSaved: () => void;
 }
 
-const leadershipFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  role: z.enum(["Leadership Team", "Shepherd", "Deacon"]),
-  ministry: z.string().optional(),
-  bio: z.string().min(10, "Bio must be at least 10 characters"),
-  image_url: z.string().optional(),
-  email: z.string().email("Invalid email address").optional().nullable(),
-  display_order: z.number().int().min(1).optional().nullable(),
-});
-
-type LeadershipFormValues = z.infer<typeof leadershipFormSchema>;
-
-export function LeadershipFormDialog({
-  open,
-  member,
-  onClose,
-  onSaved,
+export function LeadershipFormDialog({ 
+  open, 
+  member, 
+  onClose, 
+  onSaved 
 }: LeadershipFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEditing = !!member;
-
+  
   const form = useForm<LeadershipFormValues>({
-    resolver: zodResolver(leadershipFormSchema),
+    resolver: zodResolver(leadershipSchema),
     defaultValues: {
-      name: member?.name || "",
-      role: (member?.role as LeadershipRole) || "Leadership Team",
-      ministry: member?.ministry || "",
-      bio: member?.bio || "",
-      image_url: member?.image_url || "",
-      email: member?.email || "",
-      display_order: member?.display_order || 100,
-    },
+      name: "",
+      role: "Leadership Team",
+      ministry: "",
+      bio: "",
+      email: "",
+      image_url: null,
+      display_order: 100
+    }
   });
 
-  const onSubmit = async (values: LeadershipFormValues) => {
+  // Reset form when dialog opens/closes or when editing member changes
+  useEffect(() => {
+    if (open) {
+      if (member) {
+        form.reset({
+          name: member.name,
+          role: member.role,
+          ministry: member.ministry || "",
+          bio: member.bio,
+          email: member.email || "",
+          image_url: member.image_url,
+          display_order: member.display_order || 100
+        });
+      } else {
+        form.reset({
+          name: "",
+          role: "Leadership Team",
+          ministry: "",
+          bio: "",
+          email: "",
+          image_url: null,
+          display_order: 100
+        });
+      }
+    }
+  }, [open, member, form]);
+
+  const onSubmit = async (data: LeadershipFormValues) => {
     setIsSubmitting(true);
+    
     try {
-      if (isEditing && member) {
+      const leadershipData = {
+        name: data.name,
+        role: data.role,
+        ministry: data.ministry || null,
+        bio: data.bio,
+        email: data.email || null,
+        image_url: data.image_url || null,
+        display_order: data.display_order || 100
+      };
+
+      if (member) {
         // Update existing member
         const { error } = await supabase
-          .from("leadership")
-          .update({
-            name: values.name,
-            role: values.role,
-            ministry: values.ministry || null,
-            bio: values.bio,
-            image_url: values.image_url || null,
-            email: values.email || null,
-            display_order: values.display_order || 100,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", member.id);
-
+          .from('leadership')
+          .update(leadershipData)
+          .eq('id', member.id);
+        
         if (error) throw error;
-        toast.success("Leadership member updated successfully");
+        
+        toast.success('Leadership member updated successfully');
       } else {
         // Create new member
-        const { error } = await supabase.from("leadership").insert({
-          name: values.name,
-          role: values.role,
-          ministry: values.ministry || null,
-          bio: values.bio,
-          image_url: values.image_url || null,
-          email: values.email || null,
-          display_order: values.display_order || 100,
-        });
-
+        const { error } = await supabase
+          .from('leadership')
+          .insert([leadershipData]);
+        
         if (error) throw error;
-        toast.success("Leadership member added successfully");
+        
+        toast.success('Leadership member created successfully');
       }
-
+      
       onSaved();
-    } catch (error) {
-      console.error("Error saving leadership member:", error);
-      toast.error("Failed to save leadership member");
+    } catch (error: any) {
+      console.error('Error saving leadership member:', error);
+      toast.error(`Failed to save leadership member: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit Leadership Member" : "Add New Leadership Member"}
-          </DialogTitle>
+          <DialogTitle>{member ? "Edit Leadership Member" : "Add New Leadership Member"}</DialogTitle>
         </DialogHeader>
+        
+        <ScrollArea className="max-h-[70vh] px-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pr-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Full Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      <SelectContent>
+                        <SelectItem value="Leadership Team">Leadership Team</SelectItem>
+                        <SelectItem value="Shepherd">Shepherd</SelectItem>
+                        <SelectItem value="Deacon">Deacon</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Role</FormLabel>
-                      <FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Leadership Team">
-                              Leadership Team
-                            </SelectItem>
-                            <SelectItem value="Shepherd">Shepherd</SelectItem>
-                            <SelectItem value="Deacon">Deacon</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                control={form.control}
+                name="ministry"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ministry Area (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Youth, Worship, Outreach" {...field} value={field.value || ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="ministry"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ministry (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Youth, Missions, etc."
-                          {...field}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email (Optional)</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Email Address" {...field} value={field.value || ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="email@example.com"
-                          {...field}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <FormField
+                control={form.control}
+                name="display_order"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Display Order (Optional)</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number" 
+                        placeholder="100" 
+                        {...field}
+                        value={field.value?.toString() || '100'}
+                        onChange={e => field.onChange(parseInt(e.target.value) || 100)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <p className="text-sm text-muted-foreground">
+                      Lower numbers display first (e.g. 10 displays before 20)
+                    </p>
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="display_order"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Display Order (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="100"
-                          {...field}
-                          value={field.value === null ? "" : field.value}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            field.onChange(value === "" ? null : parseInt(value, 10));
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <ImageField control={form.control} />
+
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bio</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Tell us about this person..." 
+                        className="min-h-[120px]" 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex justify-end space-x-4 pt-4">
+                <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {member ? "Update Member" : "Add Member"}
+                </Button>
               </div>
-
-              <div className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bio</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Short biography..."
-                          className="min-h-[120px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="image_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image (Optional)</FormLabel>
-                      <FormControl>
-                        <ImageUpload
-                          value={field.value || ""}
-                          onChange={field.onChange}
-                          bucket="leadership_images"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-4">
-              <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isEditing ? "Update" : "Add"} Leadership Member
-              </Button>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
