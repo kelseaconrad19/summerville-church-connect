@@ -20,6 +20,7 @@ export default function AdminLeadershipPage() {
       const { data, error } = await supabase
         .from("leadership")
         .select("*")
+        .order("display_order", { ascending: true })
         .order("role", { ascending: true })
         .order("name", { ascending: true });
 

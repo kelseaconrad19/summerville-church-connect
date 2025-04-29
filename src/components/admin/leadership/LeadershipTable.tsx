@@ -50,13 +50,14 @@ export function LeadershipTable({ leadershipMembers, onEdit, onRefresh }: Leader
               <TableHead>Role</TableHead>
               <TableHead>Ministry</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Display Order</TableHead>
               <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {leadershipMembers.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   No leadership members found.
                 </TableCell>
               </TableRow>
@@ -75,6 +76,7 @@ export function LeadershipTable({ leadershipMembers, onEdit, onRefresh }: Leader
                   <TableCell>{member.role}</TableCell>
                   <TableCell>{member.ministry || '-'}</TableCell>
                   <TableCell>{member.email || '-'}</TableCell>
+                  <TableCell>{member.display_order || '100'}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button

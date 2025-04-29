@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -46,6 +47,7 @@ const leadershipFormSchema = z.object({
   bio: z.string().min(10, "Bio must be at least 10 characters"),
   image_url: z.string().optional(),
   email: z.string().email("Invalid email address").optional().nullable(),
+  display_order: z.number().int().min(1).optional().nullable(),
 });
 
 type LeadershipFormValues = z.infer<typeof leadershipFormSchema>;
@@ -68,6 +70,7 @@ export function LeadershipFormDialog({
       bio: member?.bio || "",
       image_url: member?.image_url || "",
       email: member?.email || "",
+      display_order: member?.display_order || 100,
     },
   });
 
@@ -85,6 +88,7 @@ export function LeadershipFormDialog({
             bio: values.bio,
             image_url: values.image_url || null,
             email: values.email || null,
+            display_order: values.display_order || 100,
             updated_at: new Date().toISOString(),
           })
           .eq("id", member.id);
@@ -100,6 +104,7 @@ export function LeadershipFormDialog({
           bio: values.bio,
           image_url: values.image_url || null,
           email: values.email || null,
+          display_order: values.display_order || 100,
         });
 
         if (error) throw error;
@@ -116,7 +121,6 @@ export function LeadershipFormDialog({
   };
 
   return (
-    
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -204,6 +208,29 @@ export function LeadershipFormDialog({
                           placeholder="email@example.com"
                           {...field}
                           value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="display_order"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Display Order (Optional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="100"
+                          {...field}
+                          value={field.value === null ? "" : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            field.onChange(value === "" ? null : parseInt(value, 10));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
