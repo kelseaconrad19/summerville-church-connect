@@ -36,3 +36,16 @@ export interface SermonFormData {
   audio_url?: string;
   is_published: boolean;
 }
+
+export interface ClassFormData {
+  id?: string;
+  title: string;
+  teacher: string;
+  description: string;
+  location: string;
+  time: string;
+  ministry_id: string | null;
+  image_url: string | null;
+  start_date: Date | null;
+  end_date: Date | null;
+}
