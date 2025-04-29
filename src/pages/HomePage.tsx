@@ -1,10 +1,10 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ServiceTimes from "@/components/ServiceTimes";
 import EventCard from "@/components/EventCard";
 import MinistryCard from "@/components/MinistryCard";
 import EventCards from "@/components/EventCards";
+import MinistryCards from "@/components/MinistryCards";
 
 const HomePage = () => {
   return (
@@ -55,7 +55,7 @@ const HomePage = () => {
             <div className="text-center p-6 rounded-lg bg-church-light-blue">
               <div className="bg-white p-4 inline-block rounded-full mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-10 w-10 text-church-blue">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4 4 0 000 6.364L12 20.364l7.682-7.682a4 4 0 00-6.364-6.364L12 7.636l-1.318-1.318a4 4 0 00-6.364 0z" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-2">Love God</h3>
@@ -166,26 +166,7 @@ const HomePage = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <MinistryCard 
-              title="Children's Ministry" 
-              description="Nurturing the faith of our youngest members through fun and engaging Bible lessons." 
-              image="https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-              link="/ministries#children"
-            />
-            <MinistryCard 
-              title="Youth Group" 
-              description="Supporting teens in their spiritual growth through fellowship, fun activities, and Bible study." 
-              image="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-              link="/ministries#youth"
-            />
-            <MinistryCard 
-              title="Adult Bible Studies" 
-              description="Deepening faith through in-depth Bible study, prayer, and community discussion." 
-              image="https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-              link="/ministries#adult"
-            />
-          </div>
+          <MinistryCards />
           
           <div className="text-center mt-10">
             <Button asChild className="bg-church-blue hover:bg-blue-500">
