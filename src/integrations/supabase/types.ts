@@ -13,9 +13,12 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          end_date: string | null
           id: string
+          image_url: string | null
           location: string
           ministry_id: string | null
+          start_date: string | null
           teacher: string
           time: string
           title: string
@@ -24,9 +27,12 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
+          end_date?: string | null
           id?: string
+          image_url?: string | null
           location: string
           ministry_id?: string | null
+          start_date?: string | null
           teacher: string
           time: string
           title: string
@@ -35,9 +41,12 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          end_date?: string | null
           id?: string
+          image_url?: string | null
           location?: string
           ministry_id?: string | null
+          start_date?: string | null
           teacher?: string
           time?: string
           title?: string
