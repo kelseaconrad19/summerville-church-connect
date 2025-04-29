@@ -1,37 +1,14 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { format } from "date-fns";
+import { DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { SermonForm } from "@/components/admin/SermonForm";
 import { supabase } from "@/integrations/supabase/client";
-import { Badge } from "@/components/ui/badge";
+import { SermonsTable } from "@/components/admin/sermons/SermonsTable";
+import { DeleteSermonDialog } from "@/components/admin/sermons/DeleteSermonDialog";
+import { SermonFormDialog } from "@/components/admin/sermons/SermonFormDialog";
 import { SermonFormData } from "@/components/admin/forms/types";
 
 export default function AdminSermonsPage() {
@@ -115,100 +92,31 @@ export default function AdminSermonsPage() {
           <h1 className="text-2xl font-bold">Sermons Management</h1>
           <p className="text-muted-foreground">Add and manage church sermons</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Sermon
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[700px]">
-            <DialogHeader>
-              <DialogTitle>{editingSermon ? 'Edit Sermon' : 'Add New Sermon'}</DialogTitle>
-            </DialogHeader>
-            <SermonForm 
-              onSuccess={handleSermonCreated} 
-              initialData={editingSermon}
-            />
-          </DialogContent>
-        </Dialog>
+        <SermonFormDialog
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          editingSermon={editingSermon}
+          onSuccess={handleSermonCreated}
+        />
+        <DialogTrigger asChild>
+          <Button onClick={() => setIsDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add New Sermon
+          </Button>
+        </DialogTrigger>
       </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Speaker</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Series</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sermons.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
-                  No sermons found
-                </TableCell>
-              </TableRow>
-            ) : (
-              sermons.map((sermon: any) => (
-                <TableRow key={sermon.id}>
-                  <TableCell className="font-medium">{sermon.title}</TableCell>
-                  <TableCell>{sermon.speaker}</TableCell>
-                  <TableCell>{format(new Date(sermon.date), "MMM d, yyyy")}</TableCell>
-                  <TableCell>{sermon.series || "—"}</TableCell>
-                  <TableCell>
-                    {sermon.is_published ? (
-                      <Badge className="bg-green-500">Published</Badge>
-                    ) : (
-                      <Badge variant="outline">Draft</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(sermon)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => handleDelete(sermon.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <SermonsTable 
+        sermons={sermons} 
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Sermon</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this sermon? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteSermonDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
