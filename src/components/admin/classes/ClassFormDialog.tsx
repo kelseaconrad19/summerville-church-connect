@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ClassFormData } from "@/components/admin/forms/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
+import { useEffect } from "react";
 
 const classSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -78,7 +78,9 @@ export function ClassFormDialog({
   });
 
   // Reset form when dialog opens/closes or when editing class changes
-  useState(() => {
+  // The issue is here - useState doesn't take two arguments
+  // Changing to use React.useEffect instead
+  useEffect(() => {
     if (open) {
       if (editingClass) {
         form.reset({
