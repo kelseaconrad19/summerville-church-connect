@@ -15,13 +15,11 @@ import React from "react";
 export const navItems = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about", children: [
-    { name: "Sermons", path: "/sermons" },
-    { name: "Events", path: "/events" },
     { name: "Ministries", path: "/ministries" },
-    { name: "Classes", path: "/classes" },
+    { name: "Current Classes", path: "/classes" },
   ]},
-  { name: "Prayer Requests", path: "/prayer-request" },
-  { name: "Contact", path: "/contact" },
+  { name: "Events", path: "/events" },
+  { name: "Sermons", path: "/sermons" },
 ];
 
 export function NavLinks() {
