@@ -3,14 +3,15 @@ import React from "react";
 import { Control } from "react-hook-form";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { EventFormData } from "./types";
-import { ImageUpload } from "../ImageUpload";
 
 interface EventAdditionalInfoProps {
   control: Control<EventFormData>;
@@ -24,13 +25,30 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
         name="image_url"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Event Image</FormLabel>
+            <FormLabel>Image URL</FormLabel>
             <FormControl>
-              <ImageUpload 
-                value={field.value} 
-                onChange={field.onChange} 
-              />
+              <Input placeholder="Enter image URL" {...field} />
             </FormControl>
+            <FormDescription>
+              Enter a URL for an image to display with this event.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="church_center_url"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Church Center URL</FormLabel>
+            <FormControl>
+              <Input placeholder="Enter Church Center URL" {...field} value={field.value || ''} />
+            </FormControl>
+            <FormDescription>
+              Enter the link to this event in Church Center (used for the "Learn More" button)
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -43,11 +61,11 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
           <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
               <FormLabel className="text-base">
-                Require Registration
+                Registration Required
               </FormLabel>
-              <div className="text-sm text-muted-foreground">
-                Enable if attendees need to register for this event
-              </div>
+              <FormDescription>
+                Enable if attendees need to register for this event.
+              </FormDescription>
             </div>
             <FormControl>
               <Switch
@@ -55,6 +73,7 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
                 onCheckedChange={field.onChange}
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />

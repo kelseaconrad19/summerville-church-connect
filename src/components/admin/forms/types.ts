@@ -9,6 +9,7 @@ export interface EventFormData {
   time_end: string;
   image_url: string;
   requires_registration: boolean;
+  church_center_url?: string;
 }
 
 export interface Address {

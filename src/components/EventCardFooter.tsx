@@ -7,10 +7,11 @@ import { registerForEvent } from "@/lib/api/events";
 interface EventCardFooterProps {
   eventId?: string;
   requiresRegistration?: boolean;
+  churchCenterUrl?: string;
   onRegister?: () => void;
 }
 
-const EventCardFooter = ({ eventId, requiresRegistration, onRegister }: EventCardFooterProps) => {
+const EventCardFooter = ({ eventId, requiresRegistration, churchCenterUrl, onRegister }: EventCardFooterProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -49,6 +50,12 @@ const EventCardFooter = ({ eventId, requiresRegistration, onRegister }: EventCar
     }
   };
 
+  const handleLearnMore = () => {
+    if (churchCenterUrl) {
+      window.open(churchCenterUrl, '_blank');
+    }
+  };
+
   if (requiresRegistration) {
     return (
       <Button 
@@ -61,7 +68,11 @@ const EventCardFooter = ({ eventId, requiresRegistration, onRegister }: EventCar
   }
 
   return (
-    <Button className="bg-church-blue hover:bg-blue-500 w-full">
+    <Button 
+      className="bg-church-blue hover:bg-blue-500 w-full"
+      onClick={handleLearnMore}
+      disabled={!churchCenterUrl}
+    >
       Learn More
     </Button>
   );

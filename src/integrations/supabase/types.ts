@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       events: {
         Row: {
+          church_center_url: string | null
           created_at: string
           created_by: string
           date_end: string
@@ -30,6 +31,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          church_center_url?: string | null
           created_at?: string
           created_by: string
           date_end: string
@@ -49,6 +51,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          church_center_url?: string | null
           created_at?: string
           created_by?: string
           date_end?: string

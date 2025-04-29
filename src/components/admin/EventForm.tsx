@@ -35,6 +35,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       time_end: "17:00",
       image_url: "",
       requires_registration: false,
+      church_center_url: "",
     },
   });
 
@@ -60,6 +61,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         time_end: format(endDate, 'HH:mm'),
         image_url: initialData.image_url || '',
         requires_registration: initialData.requires_registration || false,
+        church_center_url: initialData.church_center_url || '',
       });
     }
   }, [initialData, form]);
@@ -83,6 +85,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         time_end: data.time_end,
         image_url: data.image_url,
         requires_registration: data.requires_registration,
+        church_center_url: data.church_center_url,
       };
 
       let response;

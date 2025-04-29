@@ -47,11 +47,12 @@ const EventCard = ({ event, onRegister, title, date, time, description, image }:
         <EventCardFooter 
           eventId={event?.id}
           requiresRegistration={event?.requires_registration}
+          churchCenterUrl={event?.church_center_url}
           onRegister={onRegister}
         />
       </CardContent>
     </Card>
   );
-};
+}
 
 export default EventCard;
