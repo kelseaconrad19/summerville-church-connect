@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { EventFormData } from "./types";
 
 interface EventAdditionalInfoProps {
@@ -25,12 +26,16 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
         name="image_url"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Image URL</FormLabel>
+            <FormLabel>Event Image</FormLabel>
             <FormControl>
-              <Input placeholder="Enter image URL" {...field} />
+              <ImageUpload 
+                value={field.value} 
+                onChange={field.onChange}
+                bucket="event_images"
+              />
             </FormControl>
             <FormDescription>
-              Enter a URL for an image to display with this event.
+              Upload an image for this event or provide an image URL.
             </FormDescription>
             <FormMessage />
           </FormItem>
