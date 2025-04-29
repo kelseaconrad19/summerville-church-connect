@@ -5,6 +5,10 @@ import EventCard from "@/components/EventCard";
 import MinistryCard from "@/components/MinistryCard";
 import EventCards from "@/components/EventCards";
 import MinistryCards from "@/components/MinistryCards";
+import { supabase } from "@/integrations/supabase/client";
+import { Sermon } from "@/lib/types/sermons";
+import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
   return (
@@ -205,3 +209,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
