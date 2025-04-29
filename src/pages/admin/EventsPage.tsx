@@ -33,6 +33,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Event } from "@/lib/types/events";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { formatLocation } from "@/lib/utils/formatters";
 
 export default function AdminEventsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -183,7 +184,7 @@ export default function AdminEventsPage() {
                   <TableCell>
                     {format(new Date(event.date_start), "PPP")}
                   </TableCell>
-                  <TableCell>{event.location || "TBD"}</TableCell>
+                  <TableCell>{formatLocation(event.location)}</TableCell>
                   <TableCell>
                     <Button
                       variant={event.is_published ? "default" : "secondary"}
