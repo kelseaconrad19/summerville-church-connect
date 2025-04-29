@@ -23,6 +23,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { SermonFormData } from "./forms/types";
+import { SermonError } from "@/lib/types/sermons";
 
 interface SermonFormProps {
   onSuccess: () => void;
@@ -85,7 +86,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
       
       form.reset();
       onSuccess();
-    } catch (error: any) {
+    } catch (error: SermonError) {
       console.error("Error saving sermon:", error);
       toast.error(`Error: ${error.message || "Failed to save sermon"}`);
     } finally {

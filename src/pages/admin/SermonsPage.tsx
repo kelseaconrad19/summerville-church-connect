@@ -9,6 +9,7 @@ import { SermonsTable } from "@/components/admin/sermons/SermonsTable";
 import { DeleteSermonDialog } from "@/components/admin/sermons/DeleteSermonDialog";
 import { SermonFormDialog } from "@/components/admin/sermons/SermonFormDialog";
 import { SermonFormData } from "@/components/admin/forms/types";
+import { Sermon } from "@/lib/types/sermons";
 
 export default function AdminSermonsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function AdminSermonsPage() {
           throw error;
         }
 
-        return data || [];
+        return data as Sermon[] || [];
       } catch (error) {
         console.error('Exception in sermons fetch:', error);
         return [];
@@ -49,7 +50,7 @@ export default function AdminSermonsPage() {
     refetch();
   };
 
-  const handleEdit = (sermon: any) => {
+  const handleEdit = (sermon: Sermon) => {
     setEditingSermon({
       ...sermon,
       date: new Date(sermon.date),

@@ -1,4 +1,3 @@
-
 export interface Address {
   address1: string;
   address2?: string;
@@ -31,9 +30,9 @@ export interface SermonFormData {
   title: string;
   speaker: string;
   date: Date;
-  description: string;
-  series: string;
-  video_url: string;
-  audio_url: string;
+  description?: string;
+  series?: string;
+  video_url?: string;
+  audio_url?: string;
   is_published: boolean;
 }

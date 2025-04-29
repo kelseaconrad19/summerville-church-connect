@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
+import { Sermon } from "@/lib/types/sermons";
 
 const SermonsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,7 +31,7 @@ const SermonsPage = () => {
           throw error;
         }
 
-        return data || [];
+        return data as Sermon[] || [];
       } catch (error) {
         console.error('Exception in sermons fetch:', error);
         return [];
@@ -42,11 +43,11 @@ const SermonsPage = () => {
   const latestSermon = sermons.length > 0 ? sermons[0] : null;
   
   // Extract unique series and speakers for filters
-  const seriesList = [...new Set(sermons.map((sermon: any) => sermon.series).filter(Boolean))];
-  const speakersList = [...new Set(sermons.map((sermon: any) => sermon.speaker))];
+  const seriesList = [...new Set(sermons.map((sermon: Sermon) => sermon.series).filter(Boolean))];
+  const speakersList = [...new Set(sermons.map((sermon: Sermon) => sermon.speaker))];
   
   // Filter sermons based on search and filters
-  const filteredSermons = sermons.filter((sermon: any) => {
+  const filteredSermons = sermons.filter((sermon: Sermon) => {
     const matchesSearch = sermon.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (sermon.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
     const matchesSeries = selectedSeries === "all" || sermon.series === selectedSeries;
