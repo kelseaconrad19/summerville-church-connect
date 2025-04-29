@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/use-admin";
-import { CalendarDays, BookOpen, Church, Users, File, FileText } from "lucide-react";
+import { CalendarDays, BookOpen, Church, Users, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function DashboardPage() {
   const { isAdmin } = useAdmin();
@@ -165,73 +166,72 @@ export default function DashboardPage() {
     );
   }
 
+  // Create a reusable component for the stat cards
+  const StatCard = ({ title, value, icon: Icon, href }: { 
+    title: string;
+    value: number;
+    icon: React.ElementType;
+    href: string;
+  }) => (
+    <Link to={href} className="block">
+      <Card className="hover:shadow-md transition-shadow duration-200 cursor-pointer">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+          <Icon className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{value}</div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Admin Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Events</CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{eventStats?.total || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Upcoming Events</CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{eventStats?.upcoming || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Classes</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{classStats || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sermons</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{sermonStats || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ministries</CardTitle>
-            <Church className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{ministryStats || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Leadership</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{leadershipStats || 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{userStats || 0}</div>
-          </CardContent>
-        </Card>
+        <StatCard 
+          title="Total Events" 
+          value={eventStats?.total || 0} 
+          icon={CalendarDays} 
+          href="/admin/events" 
+        />
+        <StatCard 
+          title="Upcoming Events" 
+          value={eventStats?.upcoming || 0} 
+          icon={CalendarDays} 
+          href="/admin/events" 
+        />
+        <StatCard 
+          title="Classes" 
+          value={classStats || 0} 
+          icon={BookOpen} 
+          href="/admin/classes" 
+        />
+        <StatCard 
+          title="Sermons" 
+          value={sermonStats || 0} 
+          icon={FileText} 
+          href="/admin/sermons" 
+        />
+        <StatCard 
+          title="Ministries" 
+          value={ministryStats || 0} 
+          icon={Church} 
+          href="/admin/ministries" 
+        />
+        <StatCard 
+          title="Leadership" 
+          value={leadershipStats || 0} 
+          icon={Users} 
+          href="/admin/leadership" 
+        />
+        <StatCard 
+          title="Users" 
+          value={userStats || 0} 
+          icon={Users} 
+          href="/admin/users" 
+        />
       </div>
     </div>
   );
