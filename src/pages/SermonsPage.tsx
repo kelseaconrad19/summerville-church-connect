@@ -56,9 +56,9 @@ const SermonsPage = () => {
     return matchesSearch && matchesSeries && matchesSpeaker;
   });
 
-  // Format the date for display
-  const formatSermonDate = (dateString: string) => {
-    return format(new Date(dateString), "MMMM d, yyyy");
+  // Format the date for display - updated to handle both string and Date types
+  const formatSermonDate = (dateValue: string | Date): string => {
+    return format(new Date(dateValue), "MMMM d, yyyy");
   };
 
   // Extract YouTube video ID from URL

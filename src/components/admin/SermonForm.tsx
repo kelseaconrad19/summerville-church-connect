@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -86,9 +85,10 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
       
       form.reset();
       onSuccess();
-    } catch (error) {
-      console.error("Error saving sermon:", error);
-      toast.error(`Error: ${error.message || "Failed to save sermon"}`);
+    } catch (error: unknown) {
+      const sermonError = error as SermonError;
+      console.error("Error saving sermon:", sermonError);
+      toast.error(`Error: ${sermonError.message || "Failed to save sermon"}`);
     } finally {
       setIsSubmitting(false);
     }

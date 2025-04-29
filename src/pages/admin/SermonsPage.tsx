@@ -9,7 +9,7 @@ import { SermonsTable } from "@/components/admin/sermons/SermonsTable";
 import { DeleteSermonDialog } from "@/components/admin/sermons/DeleteSermonDialog";
 import { SermonFormDialog } from "@/components/admin/sermons/SermonFormDialog";
 import { SermonFormData } from "@/components/admin/forms/types";
-import { Sermon } from "@/lib/types/sermons";
+import { Sermon, SermonError } from "@/lib/types/sermons";
 
 export default function AdminSermonsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -76,9 +76,10 @@ export default function AdminSermonsPage() {
       
       toast.success('Sermon deleted successfully');
       refetch();
-    } catch (error: any) {
-      console.error('Error deleting sermon:', error);
-      toast.error(`Failed to delete sermon: ${error.message}`);
+    } catch (error: unknown) {
+      const sermonError = error as SermonError;
+      console.error('Error deleting sermon:', sermonError);
+      toast.error(`Failed to delete sermon: ${sermonError.message}`);
     } finally {
       setIsDeleteDialogOpen(false);
       setDeletingSermonId(null);

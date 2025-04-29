@@ -27,7 +27,7 @@ const SermonCard = ({ title, speaker, date, description, videoUrl, audioUrl }: S
             <Button 
               className="bg-church-blue hover:bg-blue-500"
             >
-              <a href={videoUrl}>Watch</a>
+              <a href={videoUrl} target="_blank" rel="noopener noreferrer">Watch</a>
             </Button>
           )}
           {audioUrl && (
@@ -35,7 +35,7 @@ const SermonCard = ({ title, speaker, date, description, videoUrl, audioUrl }: S
               variant="outline"
               className="border-church-blue text-church-blue hover:bg-church-light-blue"
             >
-              Listen
+              <a href={audioUrl} target="_blank" rel="noopener noreferrer">Listen</a>
             </Button>
           )}
         </div>
