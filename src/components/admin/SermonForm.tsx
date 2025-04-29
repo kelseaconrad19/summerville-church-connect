@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -93,8 +92,8 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
   };
 
   return (
-    <ScrollArea className="max-h-[70vh]">
-      <div className="p-1">
+    <ScrollArea className="max-h-[70vh] px-2">
+      <div className="pr-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
