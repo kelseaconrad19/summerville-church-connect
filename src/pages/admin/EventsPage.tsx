@@ -48,7 +48,10 @@ export default function AdminEventsPage() {
       try {
         const { data, error } = await supabase
           .from('events')
-          .select('*')
+          .select(`
+            *,
+            ministry:ministries(id, title)
+          `)
           .order('date_start', { ascending: true });
 
         if (error) {
@@ -58,7 +61,7 @@ export default function AdminEventsPage() {
         }
 
         console.log("Events data:", data);
-        return data as Event[];
+        return data as (Event & { ministry: { id: string; title: string } | null })[];
       } catch (error) {
         console.error("Exception in events fetch:", error);
         return [];
@@ -163,6 +166,7 @@ export default function AdminEventsPage() {
               <TableHead>Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Location</TableHead>
+              <TableHead>Ministry</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -170,7 +174,7 @@ export default function AdminEventsPage() {
           <TableBody>
             {!events || events.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
                   No events found
                 </TableCell>
               </TableRow>
@@ -182,6 +186,9 @@ export default function AdminEventsPage() {
                     {format(new Date(event.date_start), "PPP")}
                   </TableCell>
                   <TableCell>{formatLocation(event.location)}</TableCell>
+                  <TableCell>
+                    {event.ministry?.title || '—'}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant={event.is_published ? "default" : "secondary"}

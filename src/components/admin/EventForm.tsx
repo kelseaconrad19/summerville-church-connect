@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form";
 import { EventBasicInfo } from "./forms/EventBasicInfo";
 import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
+import { MinistryField } from "./forms/MinistryField";
 import { EventFormData } from "./forms/types";
 import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
@@ -39,6 +40,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       event_type: "upcoming",
       location_type: "church",
       church_location: "",
+      ministry_id: "",
     },
   });
 
@@ -80,6 +82,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         event_type: eventType,
         location_type: isChurchLocation ? "church" : "other",
         church_location: churchLocation,
+        ministry_id: initialData.ministry_id || '',
       });
     }
   }, [initialData, form]);
@@ -127,6 +130,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
+        ministry_id: data.ministry_id || null,
       };
 
       let response;
@@ -167,6 +171,13 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <EventBasicInfo control={form.control} />
           <EventDateTimeFields control={form.control} />
+          
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 gap-6">
+              <MinistryField control={form.control} />
+            </div>
+          </div>
+          
           <EventAdditionalInfo control={form.control} />
           
           <div className="flex justify-end space-x-2 pt-4">

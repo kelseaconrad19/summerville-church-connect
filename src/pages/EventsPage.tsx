@@ -26,9 +26,6 @@ const EventsPage = () => {
     refetchRecurring();
   };
   
-  console.log("Upcoming events:", upcomingEvents);
-  console.log("Recurring events:", recurringEvents);
-  
   return (
     <div>
       <PageHeader 
