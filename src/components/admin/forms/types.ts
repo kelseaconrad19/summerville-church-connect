@@ -1,3 +1,4 @@
+
 export interface Address {
   address1: string;
   address2?: string;
@@ -14,7 +15,7 @@ export interface EventFormData {
   description: string;
   location: Address;
   date_start: Date;
-  date_end: Date;
+  date_end: Date | null;
   time_start: string;
   time_end: string;
   image_url: string;
@@ -23,6 +24,7 @@ export interface EventFormData {
   event_type: "upcoming" | "ended" | "recurring";
   location_type: LocationType;
   church_location?: string;
+  ministry_id?: string | null;
 }
 
 export interface SermonFormData {
