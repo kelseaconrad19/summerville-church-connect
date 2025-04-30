@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import { EventBasicInfo } from "./forms/EventBasicInfo";
 import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
-import { EventMinistryField } from "./forms/EventMinistryField";
+import { MinistryField } from "./forms/MinistryField";
 import { EventFormData } from "./forms/types";
 import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
@@ -193,7 +193,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4 border-b pb-2">Ministry Assignment</h3>
-              <EventMinistryField control={form.control} />
+              <MinistryField control={form.control} />
             </CardContent>
           </Card>
           
