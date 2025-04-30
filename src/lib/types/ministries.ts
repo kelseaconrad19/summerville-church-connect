@@ -26,5 +26,5 @@ export interface MinistryFormValues {
   involvement_description: string;
   involvement_ways: string[];
   activities: string[];
+  is_published: boolean;
 }
-
