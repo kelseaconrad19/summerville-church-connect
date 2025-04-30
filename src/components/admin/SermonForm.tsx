@@ -261,7 +261,7 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-2">
-                      <YouTube className="h-4 w-4" />
+                      <Youtube className="h-4 w-4" />
                       YouTube URL (Optional)
                     </FormLabel>
                     <FormControl>
@@ -342,3 +342,4 @@ export function SermonForm({ onSuccess, initialData }: SermonFormProps) {
     </ScrollArea>
   );
 }
+
