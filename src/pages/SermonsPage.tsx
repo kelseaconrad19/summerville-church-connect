@@ -74,6 +74,7 @@ const SermonsPage = () => {
       <PageHeader 
         title="Sermons"
         description="Listen to and watch recent messages from our services"
+        backgroundImage="/images/sermons.jpg"
       />
       
       <section className="section-padding bg-white">

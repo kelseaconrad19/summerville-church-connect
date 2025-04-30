@@ -48,6 +48,7 @@ const MinistriesPage = () => {
       <PageHeader 
         title="Our Ministries"
         description="Connect, serve, and grow through these ministry opportunities"
+        backgroundImage="/images/ministries.jpg"
       />
       
       <section className="section-padding bg-white">

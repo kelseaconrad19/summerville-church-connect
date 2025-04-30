@@ -81,7 +81,7 @@ const ClassesPage = () => {
       <PageHeader 
         title="Classes" 
         description="Join us for a variety of Bible studies and educational opportunities"
-        backgroundImage="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1470&auto=format&fit=crop"
+        backgroundImage="/images/classes.png"
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

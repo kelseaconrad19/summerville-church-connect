@@ -106,7 +106,7 @@ export function LeadershipFormDialog({
       }
       
       onSaved();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving leadership member:', error);
       toast.error(`Failed to save leadership member: ${error.message}`);
     } finally {
@@ -123,7 +123,7 @@ export function LeadershipFormDialog({
         
         <ScrollArea className="max-h-[70vh] px-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pr-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pr-4 pl-4">
               <FormField
                 control={form.control}
                 name="name"

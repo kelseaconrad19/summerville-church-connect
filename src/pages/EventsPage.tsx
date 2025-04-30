@@ -34,6 +34,7 @@ const EventsPage = () => {
       <PageHeader 
         title="Events & Calendar"
         description="Stay connected with what's happening in our church community"
+        backgroundImage="/images/events.jpg"
       />
       
       <section className="section-padding bg-white">

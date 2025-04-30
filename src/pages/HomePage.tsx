@@ -11,7 +11,7 @@ const HomePage = () => {
       <section 
         className="relative bg-cover bg-center h-[80vh] flex items-center"
         style={{ 
-          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/scoc.png')",
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
@@ -98,15 +98,15 @@ const HomePage = () => {
             <div>
               <div className="rounded-lg overflow-hidden shadow-lg">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.230364624891!2d-80.17551502392329!3d32.78203167505267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe71f78e00c47d%3A0xf1e68a5436afcd06!2sSummerville%2C%20SC!5e0!3m2!1sen!2sus!4v1682783365151!5m2!1sen!2sus"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.057827702468!2d-80.18001348479398!3d32.96609818092673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe7103c50c1bff%3A0xf9433a0661b99d53!2s413%20Old%20Trolley%20Rd%2C%20Summerville%2C%20SC%2029485!5e0!3m2!1sen!2sus!4v1682790000000!5m2!1sen!2sus" 
                   width="100%" 
                   height="400" 
                   style={{ border: 0 }} 
                   allowFullScreen 
                   loading="lazy"
                   className="rounded-lg"
-                  title="Church Location"
-                ></iframe>
+                  title="Church Location">
+                </iframe>
               </div>
               <p className="text-center mt-4 text-gray-700">
                 <strong>413 Old Trolley Rd, Summerville, SC 29485</strong>
@@ -156,7 +156,7 @@ const HomePage = () => {
       <section 
         className="py-16 md:py-24 px-4 text-center bg-cover bg-center relative"
         style={{ 
-          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/about.jpg')",
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}

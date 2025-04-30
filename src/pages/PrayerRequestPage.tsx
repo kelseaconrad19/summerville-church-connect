@@ -66,6 +66,7 @@ const PrayerRequestPage = () => {
       <PageHeader 
         title="Prayer Requests"
         description="Share your prayer needs with our church family"
+        backgroundImage="/images/prayer.jpg"
       />
       
       <section className="section-padding bg-white">
@@ -227,7 +228,7 @@ const PrayerRequestPage = () => {
                       of prayer and take each request seriously.
                     </p>
                     <p className="text-gray-700">
-                      If you mark a request as confidential, it will only be shared with our pastoral staff 
+                      If you mark a request as confidential, it will only be shared with our leadership staff 
                       and prayer team leaders. Otherwise, requests may be included in our weekly prayer list 
                       distributed to the congregation, unless you opt out.
                     </p>

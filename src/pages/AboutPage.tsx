@@ -6,39 +6,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
 const AboutPage = () => {
-  const leadershipTeam = [
-    {
-      name: "Len Driskell",
-      role: "Senior Minister",
-      image: "/images/LenDriskell.jpg",
-      bio: "Len grew up in central Texas and is a two-time graduate of Abilene Christian University (BA and MDiv). After three years of ministry, he joined the U.S. Navy as a Chaplain, serving Sailors, Coastguardsmen, and Marines in four locations. After 11 years on active duty, he moved to the Navy Reserves in 2019 and joined the SCOC staff as Associate Minister. He became Senior Minister in May 2023. Len and his wife, Kara, have four children: Rachel, Bethany, Naomi, and Sheamus."
-    },
-    {
-      name: "Don Allen Riggs",
-      role: "Associate Minister",
-      image: "/images/DonRiggs.png",
-      bio: "Don Alan was raised in El Paso, Texas, and earned his Bible degree from Freed-Hardeman University in 2019 with a focus on Youth and Family Ministry. He has served as both a youth minister and a pulpit minister, and is now pursuing a Master’s in Pastoral Counseling from Heritage Christian University. Don Alan joined SCOC in Fall 2024 as Associate Minister. He and his wife, Hannah, enjoy watching sports, playing tabletop games, building Lego sets, and spending time with their dog, Hank."
-    },
-    {
-      name: "Ann Miller",
-      role: "Administrator",
-      image: "/images/AnnMiller.jpeg",
-      bio: "Ann grew up in Hannibal, Missouri, and graduated from Faulkner University in Montgomery, Alabama. Since moving to the Lowcountry in 1989, she and her husband, Chris, have been active members at SCOC. Over the years, Ann has served in various volunteer roles and ministries, including Youth Secretary from 2015–2020. She became the full-time Church Administrator in October 2023. Ann and Chris have been married for 36 years and have two children and a new grandbaby they adore."
-    },
-    {
-      name: "Kara Driskell",
-      role: "Children's Ministry Administrator",
-      image: "/images/KaraDriskell.jpeg",
-      bio: "Kara joined the SCOC staff in 2019 as the part-time Children’s Ministry Administrator. She is married to Len Driskell and is a proud mother of four. For over 20 years, Kara has worked in various educational roles—as a public school teacher, homeschool mom, Girl Scout troop leader, and Sunday school teacher. She is currently a third-grade teacher at Hanahan Elementary and continues to support children’s ministry while balancing life as a mom, educator, and ministry partner."
-    }
-  ];
 
   return (
     <div>
       <PageHeader 
         title="About Our Church"
         description="Learn about our history, beliefs, and vision for the future"
-        backgroundImage="https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+        backgroundImage="/images/about.jpg"
       />
       
       {/* Our Story Section */}
@@ -65,7 +39,7 @@ const AboutPage = () => {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-lg">
               <img 
-                src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                src="/images/scoc.png" 
                 alt="Church Building" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -142,38 +116,6 @@ const AboutPage = () => {
         </div>
       </section>
       
-      {/* Leadership Team */}
-      <section className="section-padding bg-white">
-        <div className="page-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Leadership Team</h2>
-            <div className="w-20 h-1 bg-church-blue mx-auto mb-6"></div>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-              Meet the dedicated individuals who help guide our church family.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {leadershipTeam.map((leader, index) => (
-              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src={leader.image} 
-                    alt={leader.name} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{leader.name}</h3>
-                  <p className="text-church-blue font-medium mb-3">{leader.role}</p>
-                  <p className="text-gray-600">{leader.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      
       {/* Plan Your Visit */}
       <section id="visit" className="section-padding bg-church-light-blue">
         <div className="page-container">
@@ -222,15 +164,15 @@ const AboutPage = () => {
               
               <div className="rounded-lg overflow-hidden shadow-lg">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3354.230364624891!2d-80.17551502392329!3d32.78203167505267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe71f78e00c47d%3A0xf1e68a5436afcd06!2sSummerville%2C%20SC!5e0!3m2!1sen!2sus!4v1682783365151!5m2!1sen!2sus"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.057827702468!2d-80.18001348479398!3d32.96609818092673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe7103c50c1bff%3A0xf9433a0661b99d53!2s413%20Old%20Trolley%20Rd%2C%20Summerville%2C%20SC%2029485!5e0!3m2!1sen!2sus!4v1682790000000!5m2!1sen!2sus" 
                   width="100%" 
                   height="300" 
-                  style={{ border: 0 }} 
+                  style={{ border: 0 }}  
                   allowFullScreen 
-                  loading="lazy"
-                  className="rounded-lg"
-                  title="Church Location"
-                ></iframe>
+                  loading="lazy" 
+                  className="rounded-lg" 
+                  title="Church Location">
+                </iframe>
               </div>
             </div>
             
@@ -242,7 +184,7 @@ const AboutPage = () => {
                   <h3 className="text-xl font-bold mb-4">Contact Information</h3>
                   <div className="space-y-2">
                     <p><strong>Address:</strong> 413 Old Trolley Rd, Summerville, SC 29485</p>
-                    <p><strong>Phone:</strong> ((843) 873-1517</p>
+                    <p><strong>Phone:</strong> (843) 873-1517</p>
                     <p><strong>Email:</strong> office@summervillechurchofchrist.org</p>
                   </div>
                 </CardContent>
