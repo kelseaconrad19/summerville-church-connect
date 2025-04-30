@@ -128,31 +128,30 @@ export function ClassFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[650px] max-h-[90vh]">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold mb-2">{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold mb-4">{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
         </DialogHeader>
         
-        <ScrollArea className="max-h-[70vh] px-4">
+        <ScrollArea className="max-h-[75vh] px-1">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pr-4 pl-4">
-              <div className="space-y-6 bg-muted/20 p-4 rounded-md">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pr-4 pl-4">
+              <div className="space-y-6 bg-muted/10 p-6 rounded-lg border">
+                <h3 className="text-lg font-medium mb-4">Basic Information</h3>
                 <BasicInfoFields control={form.control} />
               </div>
               
-              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
+              <div className="space-y-6 bg-muted/10 p-6 rounded-lg border">
+                <h3 className="text-lg font-medium mb-4">Class Schedule</h3>
                 <DateFields control={form.control} />
               </div>
               
-              <div className="bg-muted/20 p-4 rounded-md">
-                <MinistryField control={form.control} />
-              </div>
+              <MinistryField control={form.control} />
               
-              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
-                <DescriptionField control={form.control} />
-              </div>
+              <DescriptionField control={form.control} />
               
-              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
+              <div className="space-y-4 bg-muted/10 p-6 rounded-lg border">
+                <h3 className="text-lg font-medium mb-4">Class Image</h3>
                 <ImageField control={form.control} />
               </div>
               

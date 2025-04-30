@@ -15,20 +15,20 @@ export function DescriptionField({ control }: DescriptionFieldProps) {
       control={control}
       name="description"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="flex items-center gap-2 text-base">
+        <FormItem className="p-4 border rounded-md bg-card shadow-sm">
+          <FormLabel className="flex items-center gap-2 text-base font-medium mb-2">
             <FileText className="h-4 w-4" />
             Description
           </FormLabel>
           <FormControl>
             <Textarea 
-              placeholder="Describe the class..." 
-              className="min-h-[150px] resize-none" 
+              placeholder="Describe the class content, goals, and what students will learn..." 
+              className="min-h-[180px] resize-none" 
               {...field} 
             />
           </FormControl>
-          <FormDescription className="mt-2">
-            Provide a detailed description of the class content and goals
+          <FormDescription className="mt-2 text-sm text-muted-foreground">
+            Provide a detailed description that helps potential attendees understand what the class covers
           </FormDescription>
           <FormMessage />
         </FormItem>

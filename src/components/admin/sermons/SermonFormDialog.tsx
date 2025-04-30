@@ -23,9 +23,9 @@ export const SermonFormDialog = ({
 }: SermonFormDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[750px] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>{editingSermon ? 'Edit Sermon' : 'Add New Sermon'}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold mb-4">{editingSermon ? 'Edit Sermon' : 'Add New Sermon'}</DialogTitle>
         </DialogHeader>
         <SermonForm 
           onSuccess={onSuccess} 

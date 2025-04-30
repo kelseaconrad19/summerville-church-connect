@@ -35,14 +35,14 @@ export function MinistryField({ control }: MinistryFieldProps) {
       control={control}
       name="ministry_id"
       render={({ field }) => (
-        <FormItem className="space-y-3 mb-6">
-          <FormLabel className="text-base">Related Ministry (Optional)</FormLabel>
+        <FormItem className="p-4 border rounded-md bg-card shadow-sm">
+          <FormLabel className="text-base font-medium mb-2">Related Ministry</FormLabel>
           <Select
             onValueChange={field.onChange}
             value={field.value || "none"}
           >
             <FormControl>
-              <SelectTrigger className="flex items-center">
+              <SelectTrigger className="flex items-center mt-2">
                 <Church className="mr-2 h-4 w-4 opacity-70" />
                 <SelectValue placeholder="Select a ministry" />
               </SelectTrigger>
@@ -56,8 +56,8 @@ export function MinistryField({ control }: MinistryFieldProps) {
               ))}
             </SelectContent>
           </Select>
-          <FormDescription>
-            Associate this class with a ministry
+          <FormDescription className="mt-2">
+            Associate this class with a ministry (optional)
           </FormDescription>
           <FormMessage />
         </FormItem>
