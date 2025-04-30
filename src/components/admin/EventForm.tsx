@@ -30,7 +30,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         address1: "",
       },
       date_start: new Date(),
-      date_end: null,
+      date_end: new Date(),
       time_start: "09:00",
       time_end: "17:00",
       image_url: "",
@@ -39,7 +39,6 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       event_type: "upcoming",
       location_type: "church",
       church_location: "",
-      ministry_id: null,
     },
   });
 
@@ -57,13 +56,13 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       
       // Format dates and times
       const startDate = new Date(initialData.date_start);
-      const endDate = initialData.date_end ? new Date(initialData.date_end) : null;
+      const endDate = new Date(initialData.date_end);
       
       // Determine event type
       let eventType: "upcoming" | "ended" | "recurring" = "upcoming";
       if (initialData.is_recurring) {
         eventType = "recurring";
-      } else if (endDate && new Date() > endDate) {
+      } else if (new Date() > endDate) {
         eventType = "ended";
       }
 
@@ -73,15 +72,14 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         location: location,
         date_start: startDate,
         date_end: endDate,
-        time_start: initialData.time_start || format(startDate, 'HH:mm'),
-        time_end: initialData.time_end || (endDate ? format(endDate, 'HH:mm') : '17:00'),
+        time_start: format(startDate, 'HH:mm'),
+        time_end: format(endDate, 'HH:mm'),
         image_url: initialData.image_url || '',
         requires_registration: initialData.requires_registration || false,
         church_center_url: initialData.church_center_url || '',
         event_type: eventType,
         location_type: isChurchLocation ? "church" : "other",
         church_location: churchLocation,
-        ministry_id: initialData.ministry_id || null,
       });
     }
   }, [initialData, form]);
@@ -112,9 +110,6 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       
       // Determine is_recurring based on event_type
       const isRecurring = data.event_type === "recurring";
-
-      // If end date is not provided, use start date
-      const endDate = data.date_end || data.date_start;
       
       const eventData = {
         title: data.title,
@@ -124,7 +119,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
           `${format(data.date_start, "yyyy-MM-dd")}T${data.time_start}`
         ).toISOString(),
         date_end: new Date(
-          `${format(endDate, "yyyy-MM-dd")}T${data.time_end}`
+          `${format(data.date_end, "yyyy-MM-dd")}T${data.time_end}`
         ).toISOString(),
         time_start: data.time_start,
         time_end: data.time_end,
@@ -132,7 +127,6 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
-        ministry_id: data.ministry_id || null,
       };
 
       let response;

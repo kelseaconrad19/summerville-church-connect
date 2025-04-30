@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import {
   Popover,
@@ -77,7 +76,7 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
         name="date_end"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>End Date (Optional)</FormLabel>
+            <FormLabel>End Date</FormLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -97,9 +96,6 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
                 />
               </PopoverContent>
             </Popover>
-            <FormDescription>
-              If not provided, the end date will be the same as the start date.
-            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

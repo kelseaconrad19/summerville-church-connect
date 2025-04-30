@@ -76,7 +76,6 @@ export type Database = {
           is_recurring: boolean | null
           location: string | null
           max_attendees: number | null
-          ministry_id: string | null
           recurrence_pattern: string | null
           requires_registration: boolean | null
           time_end: string | null
@@ -97,7 +96,6 @@ export type Database = {
           is_recurring?: boolean | null
           location?: string | null
           max_attendees?: number | null
-          ministry_id?: string | null
           recurrence_pattern?: string | null
           requires_registration?: boolean | null
           time_end?: string | null
@@ -118,7 +116,6 @@ export type Database = {
           is_recurring?: boolean | null
           location?: string | null
           max_attendees?: number | null
-          ministry_id?: string | null
           recurrence_pattern?: string | null
           requires_registration?: boolean | null
           time_end?: string | null
@@ -126,15 +123,7 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "events_ministry_id_fkey"
-            columns: ["ministry_id"]
-            isOneToOne: false
-            referencedRelation: "ministries"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       events_attendees: {
         Row: {
