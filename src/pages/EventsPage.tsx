@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventCard from "@/components/EventCard";
 import { fetchEvents } from "@/lib/api/events";
+import { CalendarDays } from "lucide-react";
 
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
@@ -38,58 +39,83 @@ const EventsPage = () => {
         <div className="page-container">
           {/* Calendar Component */}
           <div className="mb-12">
+            <div className="flex items-center gap-2 mb-6">
+              <CalendarDays className="h-6 w-6 text-church-blue" />
+              <h2 className="text-2xl font-bold">Church Events Calendar</h2>
+            </div>
             <EventCalendar />
           </div>
           
           {/* Event Tabs */}
-          <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
-            <div className="flex justify-center mb-6">
-              <TabsList>
-                <TabsTrigger value="upcoming" className="px-8">Upcoming Events</TabsTrigger>
-                <TabsTrigger value="recurring" className="px-8">Recurring Events</TabsTrigger>
-              </TabsList>
-            </div>
-            
-            <TabsContent value="upcoming">
-              {isLoadingUpcoming ? (
-                <div className="text-center py-8">Loading upcoming events...</div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {upcomingEvents?.length === 0 ? (
-                    <div className="col-span-full text-center py-8">No upcoming events found</div>
-                  ) : (
-                    upcomingEvents?.map((event) => (
-                      <EventCard
-                        key={event.id}
-                        event={event}
-                        onRegister={handleEventRegistration}
-                      />
-                    ))
-                  )}
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="recurring">
-              {isLoadingRecurring ? (
-                <div className="text-center py-8">Loading recurring events...</div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {recurringEvents?.length === 0 ? (
-                    <div className="col-span-full text-center py-8">No recurring events found</div>
-                  ) : (
-                    recurringEvents?.map((event) => (
-                      <EventCard
-                        key={event.id}
-                        event={event}
-                        onRegister={handleEventRegistration}
-                      />
-                    ))
-                  )}
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
+            <Tabs defaultValue="upcoming" value={activeTab} onValueChange={setActiveTab}>
+              <div className="flex justify-center mb-6">
+                <TabsList className="w-full md:w-auto">
+                  <TabsTrigger value="upcoming" className="px-8">Upcoming Events</TabsTrigger>
+                  <TabsTrigger value="recurring" className="px-8">Recurring Events</TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <TabsContent value="upcoming">
+                {isLoadingUpcoming ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="border rounded-md p-4 animate-pulse">
+                        <div className="w-full h-40 bg-slate-200 rounded-md mb-4"></div>
+                        <div className="h-6 bg-slate-200 rounded w-3/4 mb-4"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {upcomingEvents?.length === 0 ? (
+                      <div className="col-span-full text-center py-8">No upcoming events found</div>
+                    ) : (
+                      upcomingEvents?.map((event) => (
+                        <EventCard
+                          key={event.id}
+                          event={event}
+                          onRegister={handleEventRegistration}
+                        />
+                      ))
+                    )}
+                  </div>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="recurring">
+                {isLoadingRecurring ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="border rounded-md p-4 animate-pulse">
+                        <div className="w-full h-40 bg-slate-200 rounded-md mb-4"></div>
+                        <div className="h-6 bg-slate-200 rounded w-3/4 mb-4"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {recurringEvents?.length === 0 ? (
+                      <div className="col-span-full text-center py-8">No recurring events found</div>
+                    ) : (
+                      recurringEvents?.map((event) => (
+                        <EventCard
+                          key={event.id}
+                          event={event}
+                          onRegister={handleEventRegistration}
+                        />
+                      ))
+                    )}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
           
           {/* Submit Event Section */}
           <div className="mt-16 bg-church-light-blue p-8 rounded-lg text-center">

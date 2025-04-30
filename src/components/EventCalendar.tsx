@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Clock, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,6 +52,10 @@ export function EventCalendar() {
         
         // If parsing succeeds, format the object
         const parts = [];
+        if (parsedLocation.isChurchLocation && parsedLocation.churchLocation) {
+          return `${parsedLocation.churchLocation} - Church Campus`;
+        }
+        
         if (parsedLocation.address1) parts.push(parsedLocation.address1);
         if (parsedLocation.city) parts.push(parsedLocation.city);
         if (parsedLocation.state) parts.push(parsedLocation.state);
@@ -66,6 +70,10 @@ export function EventCalendar() {
     
     // If location is already an object
     if (typeof location === 'object' && location !== null) {
+      if (location.isChurchLocation && location.churchLocation) {
+        return `${location.churchLocation} - Church Campus`;
+      }
+      
       const parts = [];
       if (location.address1) parts.push(location.address1);
       if (location.city) parts.push(location.city);
@@ -78,43 +86,93 @@ export function EventCalendar() {
     return "Location TBD";
   };
 
+  // Check if date has events (either regular or recurring)
+  const hasEvents = (date: Date): boolean => {
+    return events?.some(
+      (event) => {
+        const eventDate = new Date(event.date_start);
+        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+      }
+    ) ?? false;
+  };
+
+  // Check if date has recurring events
+  const hasRecurringEvents = (date: Date): boolean => {
+    return events?.some(
+      (event) => {
+        const eventDate = new Date(event.date_start);
+        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') && event.is_recurring;
+      }
+    ) ?? false;
+  };
+
+  // Check if date has upcoming (non-recurring) events
+  const hasUpcomingEvents = (date: Date): boolean => {
+    return events?.some(
+      (event) => {
+        const eventDate = new Date(event.date_start);
+        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') && !event.is_recurring;
+      }
+    ) ?? false;
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-6">
-      <Card className="flex-1">
+      <Card className="md:w-1/3">
         <CardContent className="pt-6">
+          <div className="flex items-center gap-2 mb-4">
+            <CalendarDays className="h-5 w-5 text-church-blue" />
+            <h3 className="font-medium text-lg">Church Events Calendar</h3>
+          </div>
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
             className="rounded-md border p-3 pointer-events-auto"
             modifiers={{
-              booked: (date) => {
-                return events?.some(
-                  (event) => {
-                    const eventDate = new Date(event.date_start);
-                    return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
-                  }
-                ) ?? false;
-              },
+              hasUpcoming: hasUpcomingEvents,
+              hasRecurring: hasRecurringEvents,
+              selected: (date) => selectedDate ? format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') : false
             }}
             modifiersStyles={{
-              booked: { 
+              hasUpcoming: { 
                 fontWeight: 'normal',
                 backgroundColor: 'white',
                 color: 'black',
                 border: '2px solid #33C3F0'
+              },
+              hasRecurring: {
+                fontWeight: 'normal',
+                backgroundColor: 'white',
+                color: 'black', 
+                border: '2px dashed #33C3F0'
+              },
+              selected: {
+                backgroundColor: '#33C3F0',
+                color: 'white',
+                fontWeight: 'bold'
               }
             }}
           />
+          <div className="mt-4 flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-sm">
+              <span className="inline-block h-3 w-3 border-2 border-solid border-church-blue rounded-sm"></span>
+              <span className="text-gray-600">Upcoming Event</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="inline-block h-3 w-3 border-2 border-dashed border-church-blue rounded-sm"></span>
+              <span className="text-gray-600">Recurring Event</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
-      <Card className="flex-1">
+      <Card className="md:w-2/3">
         <CardContent className="pt-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5" />
-              <h3 className="font-medium">
+            <div className="flex items-center gap-2 border-b pb-3">
+              <CalendarDays className="h-5 w-5 text-church-blue" />
+              <h3 className="font-medium text-lg">
                 {selectedDate 
                   ? format(selectedDate, 'MMMM d, yyyy') 
                   : "Select a date to view events"}
@@ -122,28 +180,63 @@ export function EventCalendar() {
             </div>
             
             {isLoading ? (
-              <p className="text-muted-foreground">Loading events...</p>
+              <div className="flex items-center justify-center h-40">
+                <div className="animate-pulse flex space-x-4">
+                  <div className="rounded-full bg-slate-200 h-10 w-10"></div>
+                  <div className="flex-1 space-y-6 py-1">
+                    <div className="h-2 bg-slate-200 rounded"></div>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                        <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                      </div>
+                      <div className="h-2 bg-slate-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ) : selectedDate && (
               <div className="space-y-4">
                 {selectedDateEvents?.length === 0 ? (
-                  <p className="text-muted-foreground">
-                    No events scheduled for this date
-                  </p>
+                  <div className="flex flex-col items-center justify-center py-10 text-center">
+                    <CalendarDays className="h-12 w-12 text-gray-300 mb-2" />
+                    <p className="text-muted-foreground">
+                      No events scheduled for this date
+                    </p>
+                    <p className="text-sm text-gray-500 mt-2 max-w-md">
+                      Select a different date or check back later for updated events
+                    </p>
+                  </div>
                 ) : (
                   selectedDateEvents?.map((event) => (
-                    <div key={event.id} className="border rounded-lg p-4">
-                      <h4 className="font-medium">{event.title}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {event.time_start && `${event.time_start} • `}
-                        {formatLocation(event.location)}
-                      </p>
+                    <div key={event.id} className={`border rounded-lg p-4 ${event.is_recurring ? 'border-dashed border-church-blue' : 'border-solid'}`}>
+                      <div className="flex items-start justify-between">
+                        <h4 className="font-medium text-lg">{event.title}</h4>
+                        {event.is_recurring && (
+                          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                            Recurring
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-y-2 text-sm text-muted-foreground mt-2">
+                        <div className="flex items-center gap-1 w-full sm:w-auto sm:mr-4">
+                          <Clock className="h-4 w-4" />
+                          <span>{event.time_start} - {event.time_end}</span>
+                        </div>
+                        <div className="flex items-center gap-1 w-full sm:w-auto">
+                          <MapPin className="h-4 w-4" />
+                          <span>{formatLocation(event.location)}</span>
+                        </div>
+                      </div>
                       {event.description && (
-                        <p className="mt-2 text-sm">{event.description}</p>
+                        <p className="mt-3 text-sm text-gray-700 line-clamp-3">{event.description}</p>
                       )}
                       {event.requires_registration && (
-                        <Button className="mt-4" size="sm">
-                          Register
-                        </Button>
+                        <div className="mt-4">
+                          <Button className="bg-church-blue hover:bg-blue-500" size="sm">
+                            Register
+                          </Button>
+                        </div>
                       )}
                     </div>
                   ))
