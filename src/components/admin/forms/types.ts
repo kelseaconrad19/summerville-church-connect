@@ -25,6 +25,7 @@ export interface EventFormData {
   location_type: LocationType;
   church_location?: string;
   ministry_id?: string;
+  is_published: boolean;
 }
 
 export interface SermonFormData {
@@ -50,4 +51,5 @@ export interface ClassFormData {
   image_url: string | null;
   start_date: Date | null;
   end_date: Date | null;
+  is_published: boolean;
 }

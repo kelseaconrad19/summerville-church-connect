@@ -14,6 +14,9 @@ import { EventFormData } from "./forms/types";
 import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
 import { Card, CardContent } from "@/components/ui/card";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { CheckCircle } from "lucide-react";
 
 interface EventFormProps {
   onSuccess: () => void;
@@ -42,6 +45,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       location_type: "church",
       church_location: "",
       ministry_id: "none",
+      is_published: false,
     },
   });
 
@@ -84,6 +88,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         location_type: isChurchLocation ? "church" : "other",
         church_location: churchLocation,
         ministry_id: initialData.ministry_id || 'none',
+        is_published: initialData.is_published || false,
       });
     }
   }, [initialData, form]);
@@ -132,6 +137,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
         ministry_id: data.ministry_id === "none" ? null : data.ministry_id,
+        is_published: data.is_published,
       };
 
       let response;
@@ -197,6 +203,30 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
               <EventAdditionalInfo control={form.control} />
             </CardContent>
           </Card>
+
+          <FormField
+            control={form.control}
+            name="is_published"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-6">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    Publish Event
+                  </FormLabel>
+                  <FormDescription>
+                    Make this event visible to the public
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           
           <div className="flex justify-end space-x-4 pt-4">
             <Button variant="outline" type="button" onClick={onSuccess}>Cancel</Button>

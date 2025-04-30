@@ -10,7 +10,8 @@ export const classSchema = z.object({
   ministry_id: z.string().nullable(),
   image_url: z.string().nullable(),
   start_date: z.date().nullable(),
-  end_date: z.date().nullable()
+  end_date: z.date().nullable(),
+  is_published: z.boolean().default(false)
 });
 
 export type ClassFormValues = z.infer<typeof classSchema>;

@@ -8,7 +8,7 @@ import { useAuth } from '@/components/AuthProvider';
 import { toast } from 'sonner';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 import { Button } from '@/components/ui/button';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, CheckCircle } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -21,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Switch } from '@/components/ui/switch';
 import type { MinistryFormValues, Ministry } from '@/lib/types/ministries';
 
 const formSchema = z.object({
@@ -32,7 +33,8 @@ const formSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   involvement_description: z.string().optional().nullable(),
   involvement_ways: z.array(z.string()).min(1, 'At least one way to get involved is required'),
-  activities: z.array(z.string())
+  activities: z.array(z.string()),
+  is_published: z.boolean().default(false)
 });
 
 interface MinistryFormProps {
@@ -57,6 +59,7 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
       involvement_description: '',
       involvement_ways: [''],
       activities: ['', '', '', ''],
+      is_published: false
     },
   });
 
@@ -82,6 +85,7 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
         involvement_description: initialData.involvement_description || '',
         involvement_ways: involvementWays.length ? involvementWays : [''],
         activities: activities.slice(0, 4),
+        is_published: initialData.is_published || false
       });
     }
   }, [initialData, form]);
@@ -103,7 +107,8 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
         description: values.description,
         involvement_description: values.involvement_description || null,
         involvement_ways: values.involvement_ways.filter(way => way.trim() !== ''),
-        activities: values.activities.filter(activity => activity.trim() !== '')
+        activities: values.activities.filter(activity => activity.trim() !== ''),
+        is_published: values.is_published
       };
 
       if (isEditing && initialData) {
@@ -361,6 +366,30 @@ export function MinistryForm({ initialData, onSuccess }: MinistryFormProps) {
                 ))}
               </div>
             </div>
+
+            <FormField
+              control={form.control}
+              name="is_published"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-6 mt-6">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      Publish Ministry
+                    </FormLabel>
+                    <FormDescription>
+                      Make this ministry visible to the public
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
             <Button 
               type="submit" 
