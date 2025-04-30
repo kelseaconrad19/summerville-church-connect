@@ -220,6 +220,7 @@ export type Database = {
           image_url: string | null
           involvement_description: string | null
           involvement_ways: Json | null
+          is_published: boolean | null
           title: string
           updated_at: string
         }
@@ -235,6 +236,7 @@ export type Database = {
           image_url?: string | null
           involvement_description?: string | null
           involvement_ways?: Json | null
+          is_published?: boolean | null
           title: string
           updated_at?: string
         }
@@ -250,6 +252,7 @@ export type Database = {
           image_url?: string | null
           involvement_description?: string | null
           involvement_ways?: Json | null
+          is_published?: boolean | null
           title?: string
           updated_at?: string
         }

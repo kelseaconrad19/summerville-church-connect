@@ -17,6 +17,7 @@ const MinistryCards = () => {
         const { data, error } = await supabase
           .from('ministries')
           .select('*')
+          .eq('is_published', true) // Only show published ministries
           .limit(3)
           .order('title', { ascending: true });
         

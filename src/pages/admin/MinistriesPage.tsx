@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -32,6 +32,7 @@ import { MinistryForm } from '@/components/admin/MinistryForm';
 import { supabase } from '@/integrations/supabase/client';
 import type { Ministry } from '@/lib/types/ministries';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 
 export default function AdminMinistriesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -139,13 +140,14 @@ export default function AdminMinistriesPage() {
               <TableHead>Title</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {!ministries || ministries.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
+                <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
                   No ministries found
                 </TableCell>
               </TableRow>
@@ -157,6 +159,17 @@ export default function AdminMinistriesPage() {
                     {ministry.contact_first_name} {ministry.contact_last_name}
                   </TableCell>
                   <TableCell>{ministry.contact_email}</TableCell>
+                  <TableCell>
+                    {ministry.is_published ? (
+                      <Badge className="bg-green-500">
+                        <CheckCircle className="h-3 w-3 mr-1" /> Published
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-gray-500">
+                        <XCircle className="h-3 w-3 mr-1" /> Draft
+                      </Badge>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Button

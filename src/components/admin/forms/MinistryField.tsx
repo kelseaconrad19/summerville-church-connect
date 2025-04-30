@@ -18,10 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Church } from "lucide-react";
-import { EventFormData } from "./types";
+import { ClassFormData } from "./types";
 
 interface MinistryFieldProps {
-  control: Control<EventFormData>;
+  control: Control<ClassFormData>;
 }
 
 export function MinistryField({ control }: MinistryFieldProps) {
@@ -32,6 +32,7 @@ export function MinistryField({ control }: MinistryFieldProps) {
       const { data, error } = await supabase
         .from('ministries')
         .select('id, title')
+        .eq('is_published', true) // Only show published ministries
         .order('title');
       
       if (error) {
@@ -70,7 +71,7 @@ export function MinistryField({ control }: MinistryFieldProps) {
             </SelectContent>
           </Select>
           <FormDescription className="mt-2">
-            Associate this event with a ministry (optional)
+            Associate this class with a ministry (optional)
           </FormDescription>
           <FormMessage />
         </FormItem>
