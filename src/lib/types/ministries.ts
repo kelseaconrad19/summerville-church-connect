@@ -13,6 +13,7 @@ export interface Ministry {
   involvement_description: string | null;
   involvement_ways: string[] | null;
   activities: string[] | null;
+  is_published: boolean | null;
 }
 
 export interface MinistryFormValues {
@@ -26,3 +27,4 @@ export interface MinistryFormValues {
   involvement_ways: string[];
   activities: string[];
 }
+

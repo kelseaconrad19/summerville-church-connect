@@ -12,6 +12,7 @@ export interface Class {
   image_url: string | null;
   start_date: string | null;
   end_date: string | null;
+  is_published: boolean | null;
 }
 
 export interface ClassWithMinistry extends Class {
@@ -20,3 +21,4 @@ export interface ClassWithMinistry extends Class {
     id: string;
   } | null;
 }
+

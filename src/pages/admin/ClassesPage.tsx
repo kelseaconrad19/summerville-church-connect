@@ -58,6 +58,7 @@ export default function AdminClassesPage() {
       ...classItem,
       start_date: classItem.start_date ? new Date(classItem.start_date) : null,
       end_date: classItem.end_date ? new Date(classItem.end_date) : null,
+      is_published: classItem.is_published || false,
     };
     
     setEditingClass(formData);
