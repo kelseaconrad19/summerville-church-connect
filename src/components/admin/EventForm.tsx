@@ -40,7 +40,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       event_type: "upcoming",
       location_type: "church",
       church_location: "",
-      ministry_id: "",
+      ministry_id: "none",
     },
   });
 
@@ -82,7 +82,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         event_type: eventType,
         location_type: isChurchLocation ? "church" : "other",
         church_location: churchLocation,
-        ministry_id: initialData.ministry_id || '',
+        ministry_id: initialData.ministry_id || 'none',
       });
     }
   }, [initialData, form]);
@@ -130,7 +130,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
-        ministry_id: data.ministry_id || null,
+        ministry_id: data.ministry_id === "none" ? null : data.ministry_id,
       };
 
       let response;

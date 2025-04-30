@@ -52,7 +52,7 @@ export function MinistryField({ control }: MinistryFieldProps) {
           <FormLabel>Related Ministry</FormLabel>
           <Select
             onValueChange={field.onChange}
-            value={field.value || ""}
+            value={field.value || "none"}
           >
             <FormControl>
               <SelectTrigger className="flex items-center">
@@ -61,7 +61,7 @@ export function MinistryField({ control }: MinistryFieldProps) {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              <SelectItem value="">None</SelectItem>
+              <SelectItem value="none">None</SelectItem>
               {ministries.map((ministry) => (
                 <SelectItem key={ministry.id} value={ministry.id}>
                   {ministry.title}

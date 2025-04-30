@@ -38,7 +38,7 @@ export function MinistryField({ control }: MinistryFieldProps) {
           <FormLabel>Related Ministry (Optional)</FormLabel>
           <Select
             onValueChange={field.onChange}
-            value={field.value || ""}
+            value={field.value || "none"}
           >
             <FormControl>
               <SelectTrigger>

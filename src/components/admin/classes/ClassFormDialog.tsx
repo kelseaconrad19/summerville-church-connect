@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,7 +40,7 @@ export function ClassFormDialog({
       description: "",
       location: "",
       time: "",
-      ministry_id: null,
+      ministry_id: "none",
       image_url: null,
       start_date: null,
       end_date: null
@@ -56,7 +57,7 @@ export function ClassFormDialog({
           description: editingClass.description,
           location: editingClass.location,
           time: editingClass.time,
-          ministry_id: editingClass.ministry_id,
+          ministry_id: editingClass.ministry_id || "none",
           image_url: editingClass.image_url,
           start_date: editingClass.start_date || null,
           end_date: editingClass.end_date || null
@@ -68,7 +69,7 @@ export function ClassFormDialog({
           description: "",
           location: "",
           time: "",
-          ministry_id: null,
+          ministry_id: "none",
           image_url: null,
           start_date: null,
           end_date: null
