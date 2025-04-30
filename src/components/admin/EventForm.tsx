@@ -81,7 +81,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         event_type: eventType,
         location_type: isChurchLocation ? "church" : "other",
         church_location: churchLocation,
-        ministry_id: null, // We'll need to fetch this from a junction table if implemented later
+        ministry_id: initialData.ministry_id || null,
       });
     }
   }, [initialData, form]);
