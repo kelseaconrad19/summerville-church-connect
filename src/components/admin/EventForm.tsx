@@ -13,6 +13,7 @@ import { MinistryField } from "./forms/MinistryField";
 import { EventFormData } from "./forms/types";
 import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface EventFormProps {
   onSuccess: () => void;
@@ -166,21 +167,39 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
   };
 
   return (
-    <div className="max-h-[calc(100vh-8rem)] overflow-y-auto p-4">
+    <div className="max-h-[calc(100vh-8rem)] overflow-y-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <EventBasicInfo control={form.control} />
-          <EventDateTimeFields control={form.control} />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-2">Event Details</h3>
+              <EventBasicInfo control={form.control} />
+            </CardContent>
+          </Card>
           
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6">
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-2">Date & Time</h3>
+              <EventDateTimeFields control={form.control} />
+            </CardContent>
+          </Card>
+          
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-2">Ministry Assignment</h3>
               <MinistryField control={form.control} />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
           
-          <EventAdditionalInfo control={form.control} />
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-2">Additional Information</h3>
+              <EventAdditionalInfo control={form.control} />
+            </CardContent>
+          </Card>
           
-          <div className="flex justify-end space-x-2 pt-4">
+          <div className="flex justify-end space-x-4 pt-4">
+            <Button variant="outline" type="button" onClick={onSuccess}>Cancel</Button>
             <Button type="submit">{isEditing ? 'Update Event' : 'Create Event'}</Button>
           </div>
         </form>

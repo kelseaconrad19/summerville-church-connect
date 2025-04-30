@@ -128,19 +128,34 @@ export function ClassFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
+      <DialogContent className="sm:max-w-[650px] max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold mb-2">{editingClass ? "Edit Class" : "Create New Class"}</DialogTitle>
         </DialogHeader>
         
         <ScrollArea className="max-h-[70vh] px-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pr-4 pl-4">
-              <BasicInfoFields control={form.control} />
-              <DateFields control={form.control} />
-              <MinistryField control={form.control} />
-              <DescriptionField control={form.control} />
-              <ImageField control={form.control} />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pr-4 pl-4">
+              <div className="space-y-6 bg-muted/20 p-4 rounded-md">
+                <BasicInfoFields control={form.control} />
+              </div>
+              
+              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
+                <DateFields control={form.control} />
+              </div>
+              
+              <div className="bg-muted/20 p-4 rounded-md">
+                <MinistryField control={form.control} />
+              </div>
+              
+              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
+                <DescriptionField control={form.control} />
+              </div>
+              
+              <div className="space-y-4 bg-muted/20 p-4 rounded-md">
+                <ImageField control={form.control} />
+              </div>
+              
               <FormActions 
                 isSubmitting={isSubmitting} 
                 onCancel={handleCancel}

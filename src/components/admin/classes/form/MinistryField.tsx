@@ -1,10 +1,11 @@
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Control } from "react-hook-form";
 import { ClassFormValues } from "./ClassFormSchema";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Church } from "lucide-react";
 
 interface MinistryFieldProps {
   control: Control<ClassFormValues>;
@@ -34,14 +35,15 @@ export function MinistryField({ control }: MinistryFieldProps) {
       control={control}
       name="ministry_id"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>Related Ministry (Optional)</FormLabel>
+        <FormItem className="space-y-3 mb-6">
+          <FormLabel className="text-base">Related Ministry (Optional)</FormLabel>
           <Select
             onValueChange={field.onChange}
             value={field.value || "none"}
           >
             <FormControl>
-              <SelectTrigger>
+              <SelectTrigger className="flex items-center">
+                <Church className="mr-2 h-4 w-4 opacity-70" />
                 <SelectValue placeholder="Select a ministry" />
               </SelectTrigger>
             </FormControl>
@@ -54,6 +56,9 @@ export function MinistryField({ control }: MinistryFieldProps) {
               ))}
             </SelectContent>
           </Select>
+          <FormDescription>
+            Associate this class with a ministry
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
