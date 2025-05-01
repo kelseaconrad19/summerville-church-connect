@@ -86,7 +86,7 @@ export function EventCalendar() {
     return "Location TBD";
   };
 
-  // Check if date has any events (both regular and recurring)
+  // Check if date has any events (simplified to not distinguish between event types)
   const hasEvents = (date: Date): boolean => {
     return events?.some(
       (event) => {
@@ -94,30 +94,6 @@ export function EventCalendar() {
         return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
       }
     ) ?? false;
-  };
-
-  // Format the recurrence pattern for display
-  const formatRecurrencePattern = (event: Event): string => {
-    if (!event.is_recurring) return "";
-    
-    if (!event.recurrence_pattern) return "Recurring";
-    
-    try {
-      const pattern = JSON.parse(event.recurrence_pattern);
-      switch (pattern?.frequency) {
-        case "weekly": return "Weekly";
-        case "bi-weekly": return "Every 2 weeks";
-        case "monthly": return "Monthly";
-        case "custom": return "Custom schedule";
-        default: return "Recurring";
-      }
-    } catch (e) {
-      // If it's not valid JSON but a string, return it directly
-      if (typeof event.recurrence_pattern === 'string') {
-        return event.recurrence_pattern;
-      }
-      return "Recurring";
-    }
   };
 
   return (
@@ -154,7 +130,7 @@ export function EventCalendar() {
           <div className="mt-4 flex flex-col gap-2">
             <div className="flex items-center gap-2 text-sm">
               <span className="inline-block h-3 w-3 border-2 border-solid border-church-blue rounded-sm"></span>
-              <span className="text-gray-600">Date with events</span>
+              <span className="text-gray-600">Event</span>
             </div>
           </div>
         </CardContent>
@@ -200,12 +176,12 @@ export function EventCalendar() {
                   </div>
                 ) : (
                   selectedDateEvents?.map((event) => (
-                    <div key={event.id} className="border rounded-lg p-4">
+                    <div key={event.id} className={`border rounded-lg p-4 ${event.is_recurring ? 'border-dashed' : 'border-solid'}`}>
                       <div className="flex items-start justify-between">
                         <h4 className="font-medium text-lg">{event.title}</h4>
                         {event.is_recurring && (
                           <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                            {formatRecurrencePattern(event)}
+                            Recurring
                           </span>
                         )}
                       </div>
