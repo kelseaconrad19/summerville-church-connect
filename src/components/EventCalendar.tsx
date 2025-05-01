@@ -174,7 +174,7 @@ export function EventCalendar() {
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 mb-4">
             <CalendarDays className="h-5 w-5 text-church-blue" />
-            <h3 className="font-medium text-lg">Church Events Calendar</h3>
+            <h3 className="font-medium text-lg">Choose a Date</h3>
           </div>
           <Calendar
             mode="single"
