@@ -12,8 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ImageUpload } from "@/components/admin/ImageUpload";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Calendar, Clock } from "lucide-react";
 import { EventFormData } from "./types";
 
 interface EventAdditionalInfoProps {
@@ -55,43 +53,6 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
             </FormControl>
             <FormDescription>
               Enter the link to this event in Church Center (used for the "Learn More" button)
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={control}
-        name="event_type"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Event Type</FormLabel>
-            <FormControl>
-              <ToggleGroup
-                type="single"
-                value={field.value}
-                onValueChange={(value) => {
-                  if (value) field.onChange(value);
-                }}
-                className="justify-start"
-              >
-                <ToggleGroupItem value="upcoming" aria-label="Mark as upcoming">
-                  <Calendar className="mr-1" />
-                  Upcoming
-                </ToggleGroupItem>
-                <ToggleGroupItem value="ended" aria-label="Mark as ended">
-                  <Clock className="mr-1" />
-                  Ended
-                </ToggleGroupItem>
-                <ToggleGroupItem value="recurring" aria-label="Mark as recurring">
-                  <Calendar className="mr-1" />
-                  Recurring
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </FormControl>
-            <FormDescription>
-              Choose the event type. Events will automatically be marked as ended after the end date passes.
             </FormDescription>
             <FormMessage />
           </FormItem>

@@ -2,9 +2,9 @@
 import React from "react";
 import { format } from "date-fns";
 import { Control } from "react-hook-form";
-import { CalendarPlus } from "lucide-react";
+import { CalendarPlus, Calendar, Clock, Repeat } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
   FormControl,
   FormField,
@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface EventDateTimeFieldsProps {
   control: Control<EventFormData>;
@@ -38,6 +39,43 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
 
   return (
     <div className="space-y-6">
+      <FormField
+        control={control}
+        name="event_type"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Event Type</FormLabel>
+            <FormControl>
+              <ToggleGroup
+                type="single"
+                value={field.value}
+                onValueChange={(value) => {
+                  if (value) field.onChange(value);
+                }}
+                className="justify-start"
+              >
+                <ToggleGroupItem value="upcoming" aria-label="Mark as upcoming">
+                  <Calendar className="mr-1" />
+                  Upcoming
+                </ToggleGroupItem>
+                <ToggleGroupItem value="ended" aria-label="Mark as ended">
+                  <Clock className="mr-1" />
+                  Ended
+                </ToggleGroupItem>
+                <ToggleGroupItem value="recurring" aria-label="Mark as recurring">
+                  <Repeat className="mr-1" />
+                  Recurring
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </FormControl>
+            <FormDescription>
+              Choose the event type. Events will automatically be marked as ended after the end date passes.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="grid gap-4 md:grid-cols-2">
         <FormField
           control={control}
@@ -55,7 +93,7 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
+                  <CalendarComponent
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
@@ -99,7 +137,7 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                  <Calendar
+                  <CalendarComponent
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
