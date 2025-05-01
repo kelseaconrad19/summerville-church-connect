@@ -183,8 +183,8 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         date_end: new Date(
           `${format(data.date_end, "yyyy-MM-dd")}T${data.time_end}`
         ).toISOString(),
-        time_start: data.time_start,
-        time_end: data.time_end,
+        time_start: format(new Date(`1970-01-01T${data.time_start}`), "h:mm"),
+        time_end: format(new Date(`1970-01-01T${data.time_end}`), "h:mm"),
         image_url: data.image_url,
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
