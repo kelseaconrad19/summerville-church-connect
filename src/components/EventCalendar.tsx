@@ -86,7 +86,7 @@ export function EventCalendar() {
     return "Location TBD";
   };
 
-  // Check if date has any events (simplified to not distinguish between event types)
+  // Check if date has any events (both recurring and upcoming)
   const hasEvents = (date: Date): boolean => {
     return events?.some(
       (event) => {
@@ -195,6 +195,11 @@ export function EventCalendar() {
                           <span>{formatLocation(event.location)}</span>
                         </div>
                       </div>
+                      {event.is_recurring && event.recurrence_pattern && (
+                        <div className="mt-2 text-sm text-blue-700">
+                          {event.recurrence_pattern}
+                        </div>
+                      )}
                       {event.description && (
                         <p className="mt-3 text-sm text-gray-700 line-clamp-3">{event.description}</p>
                       )}

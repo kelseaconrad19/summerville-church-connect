@@ -10,7 +10,7 @@ import { EventBasicInfo } from "./forms/EventBasicInfo";
 import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
 import { EventMinistryField } from "./forms/EventMinistryField";
-import { EventFormData } from "./forms/types";
+import { EventFormData, RecurrenceFrequency } from "./forms/types";
 import { format } from "date-fns";
 import type { Event } from "@/lib/types/events";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,8 +46,12 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       church_location: "",
       ministry_id: "none",
       is_published: false,
+      recurrence_frequency: "weekly",
     },
   });
+
+  // Watch event_type to show/hide recurrence frequency field
+  const eventType = form.watch("event_type");
 
   // Load initial data when editing
   useEffect(() => {
@@ -73,6 +77,21 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         eventType = "ended";
       }
 
+      // Parse recurrence pattern for frequency
+      let recurrenceFrequency: RecurrenceFrequency = "weekly";
+      if (initialData.recurrence_pattern) {
+        try {
+          const pattern = initialData.recurrence_pattern.toLowerCase();
+          if (pattern.includes("daily")) recurrenceFrequency = "daily";
+          else if (pattern.includes("bi-weekly") || pattern.includes("biweekly")) recurrenceFrequency = "biweekly";
+          else if (pattern.includes("monthly")) recurrenceFrequency = "monthly";
+          else if (pattern.includes("custom")) recurrenceFrequency = "custom";
+          else recurrenceFrequency = "weekly"; // Default to weekly
+        } catch (e) {
+          console.error("Error parsing recurrence pattern:", e);
+        }
+      }
+
       form.reset({
         title: initialData.title || '',
         description: initialData.description || '',
@@ -89,6 +108,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         church_location: churchLocation,
         ministry_id: initialData.ministry_id || 'none',
         is_published: initialData.is_published || false,
+        recurrence_frequency: recurrenceFrequency,
       });
     }
   }, [initialData, form]);
@@ -120,6 +140,30 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       // Determine is_recurring based on event_type
       const isRecurring = data.event_type === "recurring";
       
+      // Create recurrence pattern string based on frequency
+      let recurrencePattern = null;
+      if (isRecurring && data.recurrence_frequency) {
+        switch (data.recurrence_frequency) {
+          case "daily":
+            recurrencePattern = "Occurs daily";
+            break;
+          case "weekly":
+            recurrencePattern = "Occurs weekly on " + format(data.date_start, "EEEE");
+            break;
+          case "biweekly":
+            recurrencePattern = "Occurs every two weeks on " + format(data.date_start, "EEEE");
+            break;
+          case "monthly":
+            recurrencePattern = "Occurs monthly on the " + format(data.date_start, "do");
+            break;
+          case "custom":
+            recurrencePattern = "Custom recurrence pattern";
+            break;
+          default:
+            recurrencePattern = "Occurs regularly";
+        }
+      }
+      
       const eventData = {
         title: data.title,
         description: data.description,
@@ -136,6 +180,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
+        recurrence_pattern: recurrencePattern,
         ministry_id: data.ministry_id === "none" ? null : data.ministry_id,
         is_published: data.is_published,
       };
