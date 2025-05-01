@@ -33,6 +33,9 @@ interface EventDateTimeFieldsProps {
 }
 
 export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
+  // Watch the event_type to conditionally show recurrence frequency
+  const eventTypeValue = control._getWatch("event_type");
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
@@ -125,45 +128,39 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
         />
       </div>
 
-      {/* Recurrence Frequency Field - only shows when event_type is "recurring" */}
-      <FormField
-        control={control}
-        name="event_type"
-        render={({ field }) => (
-          field.value === "recurring" && (
-            <FormField
-              control={control}
-              name="recurrence_frequency"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Recurrence Frequency</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange as (value: string) => void}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select how often this event repeats" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="biweekly">Bi-weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="custom">Custom</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    How often does this event repeat?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )
-        )}
-      />
+      {/* Recurrence Frequency Field - displayed conditionally when event_type is recurring */}
+      {eventTypeValue === "recurring" && (
+        <FormField
+          control={control}
+          name="recurrence_frequency"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Recurrence Frequency</FormLabel>
+              <Select
+                value={field.value}
+                onValueChange={(value) => field.onChange(value as RecurrenceFrequency)}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select how often this event repeats" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="biweekly">Bi-weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                How often does this event repeat?
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
     </div>
   );
 }

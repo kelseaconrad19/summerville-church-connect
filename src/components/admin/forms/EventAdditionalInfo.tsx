@@ -71,7 +71,9 @@ export function EventAdditionalInfo({ control }: EventAdditionalInfoProps) {
               <ToggleGroup
                 type="single"
                 value={field.value}
-                onValueChange={field.onChange}
+                onValueChange={(value) => {
+                  if (value) field.onChange(value);
+                }}
                 className="justify-start"
               >
                 <ToggleGroupItem value="upcoming" aria-label="Mark as upcoming">
