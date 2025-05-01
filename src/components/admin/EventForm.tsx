@@ -46,6 +46,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       church_location: "",
       ministry_id: "none",
       is_published: false,
+      recurrence_frequency: "weekly",
     },
   });
 
@@ -73,6 +74,22 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         eventType = "ended";
       }
 
+      // Extract recurrence frequency from pattern or default to weekly
+      let recurrenceFrequency = "weekly";
+      if (initialData.recurrence_pattern) {
+        try {
+          const pattern = JSON.parse(initialData.recurrence_pattern);
+          if (pattern && pattern.frequency) {
+            recurrenceFrequency = pattern.frequency;
+          }
+        } catch (e) {
+          // If parsing fails, use the string value directly if it matches our enum
+          if (["weekly", "bi-weekly", "monthly", "custom"].includes(initialData.recurrence_pattern)) {
+            recurrenceFrequency = initialData.recurrence_pattern;
+          }
+        }
+      }
+
       form.reset({
         title: initialData.title || '',
         description: initialData.description || '',
@@ -89,6 +106,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         church_location: churchLocation,
         ministry_id: initialData.ministry_id || 'none',
         is_published: initialData.is_published || false,
+        recurrence_frequency: recurrenceFrequency as any,
       });
     }
   }, [initialData, form]);
@@ -120,6 +138,14 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       // Determine is_recurring based on event_type
       const isRecurring = data.event_type === "recurring";
       
+      // Create recurrence pattern JSON
+      let recurrencePattern = null;
+      if (isRecurring && data.recurrence_frequency) {
+        recurrencePattern = JSON.stringify({
+          frequency: data.recurrence_frequency
+        });
+      }
+      
       const eventData = {
         title: data.title,
         description: data.description,
@@ -136,6 +162,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         requires_registration: data.requires_registration,
         church_center_url: data.church_center_url,
         is_recurring: isRecurring,
+        recurrence_pattern: recurrencePattern,
         ministry_id: data.ministry_id === "none" ? null : data.ministry_id,
         is_published: data.is_published,
       };

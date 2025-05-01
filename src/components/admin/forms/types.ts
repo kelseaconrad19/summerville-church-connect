@@ -10,6 +10,8 @@ export interface Address {
 
 export type LocationType = "church" | "other";
 
+export type RecurrenceFrequency = "weekly" | "bi-weekly" | "monthly" | "custom";
+
 export interface EventFormData {
   title: string;
   description: string;
@@ -26,6 +28,7 @@ export interface EventFormData {
   church_location?: string;
   ministry_id?: string;
   is_published: boolean;
+  recurrence_frequency?: RecurrenceFrequency;
 }
 
 export interface SermonFormData {
