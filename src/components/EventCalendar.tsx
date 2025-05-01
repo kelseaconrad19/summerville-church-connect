@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
+import { format, isSameDay, addDays, isAfter, isBefore, getDay } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import type { Event } from "@/lib/types/events";
 
@@ -32,12 +32,52 @@ export function EventCalendar() {
     },
   });
 
-  // Filter events for the selected date
+  // Process recurring events and filter events for the selected date
   const selectedDateEvents = events?.filter(event => {
     if (!selectedDate) return false;
     
     const eventDate = new Date(event.date_start);
-    return format(eventDate, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
+    const eventEndDate = new Date(event.date_end);
+    
+    // Handle one-time events
+    if (!event.is_recurring) {
+      return isSameDay(eventDate, selectedDate);
+    }
+    
+    // Handle recurring events
+    if (event.is_recurring && event.recurrence_pattern) {
+      // Check if the selected date is after the start date
+      if (isBefore(selectedDate, eventDate)) {
+        return false;
+      }
+      
+      // Check if there's an end date and the selected date is after it
+      if (event.date_end && isAfter(selectedDate, eventEndDate)) {
+        return false;
+      }
+      
+      // Handle different recurrence patterns
+      const pattern = event.recurrence_pattern.toLowerCase();
+      const dayOfWeek = getDay(selectedDate); // 0 = Sunday, 1 = Monday, etc.
+      const startDayOfWeek = getDay(eventDate);
+      
+      if (pattern.includes("daily")) {
+        return true;
+      } else if (pattern.includes("weekly")) {
+        return dayOfWeek === startDayOfWeek;
+      } else if (pattern.includes("bi-weekly") || pattern.includes("biweekly")) {
+        // Check if the number of weeks between the start date and selected date is even
+        const diffTime = Math.abs(selectedDate.getTime() - eventDate.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffWeeks = Math.floor(diffDays / 7);
+        return dayOfWeek === startDayOfWeek && diffWeeks % 2 === 0;
+      } else if (pattern.includes("monthly")) {
+        // Check if it's the same day of the month
+        return selectedDate.getDate() === eventDate.getDate();
+      }
+    }
+    
+    return false;
   });
 
   // Function to format the location string from location object
@@ -90,8 +130,40 @@ export function EventCalendar() {
   const hasEvents = (date: Date): boolean => {
     return events?.some(
       (event) => {
-        const eventDate = new Date(event.date_start);
-        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+        // Check for one-time events
+        if (!event.is_recurring) {
+          const eventDate = new Date(event.date_start);
+          return isSameDay(eventDate, date);
+        }
+        
+        // Check for recurring events
+        if (event.is_recurring && event.recurrence_pattern) {
+          const startDate = new Date(event.date_start);
+          const endDate = event.date_end ? new Date(event.date_end) : null;
+          
+          // Check if date is within the valid range
+          if (isBefore(date, startDate)) return false;
+          if (endDate && isAfter(date, endDate)) return false;
+          
+          const pattern = event.recurrence_pattern.toLowerCase();
+          const dateDayOfWeek = getDay(date); // 0 = Sunday, 1 = Monday, etc.
+          const startDayOfWeek = getDay(startDate);
+          
+          if (pattern.includes("daily")) {
+            return true;
+          } else if (pattern.includes("weekly")) {
+            return dateDayOfWeek === startDayOfWeek;
+          } else if (pattern.includes("bi-weekly") || pattern.includes("biweekly")) {
+            const diffTime = Math.abs(date.getTime() - startDate.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffWeeks = Math.floor(diffDays / 7);
+            return dateDayOfWeek === startDayOfWeek && diffWeeks % 2 === 0;
+          } else if (pattern.includes("monthly")) {
+            return date.getDate() === startDate.getDate();
+          }
+        }
+        
+        return false;
       }
     ) ?? false;
   };
@@ -111,7 +183,7 @@ export function EventCalendar() {
             className="rounded-md border p-3 pointer-events-auto"
             modifiers={{
               hasEvents: hasEvents,
-              selected: (date) => selectedDate ? format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') : false
+              selected: (date) => selectedDate ? isSameDay(date, selectedDate) : false
             }}
             modifiersStyles={{
               hasEvents: { 

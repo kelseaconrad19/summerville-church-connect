@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -10,7 +11,7 @@ import { EventDateTimeFields } from "./forms/EventDateTimeFields";
 import { EventAdditionalInfo } from "./forms/EventAdditionalInfo";
 import { EventMinistryField } from "./forms/EventMinistryField";
 import { EventFormData, RecurrenceFrequency } from "./forms/types";
-import { format } from "date-fns";
+import { format, getDay } from "date-fns";
 import type { Event } from "@/lib/types/events";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
@@ -46,11 +47,20 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       ministry_id: "none",
       is_published: false,
       recurrence_frequency: "weekly",
+      recurring_day_of_week: getDay(new Date()),
     },
   });
 
   // Watch event_type to show/hide recurrence frequency field
   const eventType = form.watch("event_type");
+  const startDate = form.watch("date_start");
+
+  // Update recurring_day_of_week whenever date_start changes
+  useEffect(() => {
+    if (eventType === "recurring") {
+      form.setValue("recurring_day_of_week", getDay(startDate));
+    }
+  }, [startDate, form, eventType]);
 
   // Load initial data when editing
   useEffect(() => {
@@ -103,6 +113,7 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
         ministry_id: initialData.ministry_id || 'none',
         is_published: initialData.is_published || false,
         recurrence_frequency: recurrenceFrequency,
+        recurring_day_of_week: getDay(startDate),
       });
     }
   }, [initialData, form]);
@@ -137,15 +148,19 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       // Create recurrence pattern string based on frequency
       let recurrencePattern = null;
       if (isRecurring && data.recurrence_frequency) {
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayOfWeek = getDay(data.date_start);
+        const dayName = dayNames[dayOfWeek];
+        
         switch (data.recurrence_frequency) {
           case "daily":
             recurrencePattern = "Occurs daily";
             break;
           case "weekly":
-            recurrencePattern = "Occurs weekly on " + format(data.date_start, "EEEE");
+            recurrencePattern = `Occurs weekly on ${dayName}`;
             break;
           case "biweekly":
-            recurrencePattern = "Occurs every two weeks on " + format(data.date_start, "EEEE");
+            recurrencePattern = `Occurs every two weeks on ${dayName}`;
             break;
           case "monthly":
             recurrencePattern = "Occurs monthly on the " + format(data.date_start, "do");

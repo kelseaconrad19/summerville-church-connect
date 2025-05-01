@@ -29,6 +29,7 @@ export interface EventFormData {
   ministry_id?: string;
   is_published: boolean;
   recurrence_frequency?: RecurrenceFrequency;
+  recurring_day_of_week?: number; // 0 = Sunday, 1 = Monday, etc.
 }
 
 export interface SermonFormData {
