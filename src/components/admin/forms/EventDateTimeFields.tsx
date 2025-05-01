@@ -2,7 +2,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { Control } from "react-hook-form";
-import { CalendarPlus, Calendar, Clock, Repeat } from "lucide-react";
+import { CalendarPlus, Calendar, Repeat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
@@ -58,10 +58,6 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
                   <Calendar className="mr-1" />
                   Upcoming
                 </ToggleGroupItem>
-                <ToggleGroupItem value="ended" aria-label="Mark as ended">
-                  <Clock className="mr-1" />
-                  Ended
-                </ToggleGroupItem>
                 <ToggleGroupItem value="recurring" aria-label="Mark as recurring">
                   <Repeat className="mr-1" />
                   Recurring
@@ -69,7 +65,7 @@ export function EventDateTimeFields({ control }: EventDateTimeFieldsProps) {
               </ToggleGroup>
             </FormControl>
             <FormDescription>
-              Choose the event type. Events will automatically be marked as ended after the end date passes.
+              Choose whether this is a one-time or recurring event.
             </FormDescription>
             <FormMessage />
           </FormItem>

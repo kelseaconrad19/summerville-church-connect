@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -69,13 +68,8 @@ export function EventForm({ onSuccess, initialData }: EventFormProps) {
       const startDate = new Date(initialData.date_start);
       const endDate = new Date(initialData.date_end);
       
-      // Determine event type
-      let eventType: "upcoming" | "ended" | "recurring" = "upcoming";
-      if (initialData.is_recurring) {
-        eventType = "recurring";
-      } else if (new Date() > endDate) {
-        eventType = "ended";
-      }
+      // Determine event type - now only "upcoming" or "recurring"
+      const eventType: "upcoming" | "recurring" = initialData.is_recurring ? "recurring" : "upcoming";
 
       // Parse recurrence pattern for frequency
       let recurrenceFrequency: RecurrenceFrequency = "weekly";

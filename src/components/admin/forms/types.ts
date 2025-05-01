@@ -23,7 +23,7 @@ export interface EventFormData {
   image_url: string;
   requires_registration: boolean;
   church_center_url: string;
-  event_type: "upcoming" | "ended" | "recurring";
+  event_type: "upcoming" | "recurring";
   location_type: LocationType;
   church_location?: string;
   ministry_id?: string;
