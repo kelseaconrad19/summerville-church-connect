@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Event } from "@/lib/types/events";
 
 export function EventCalendar() {
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const { data: events, isLoading } = useQuery({
     queryKey: ['events-calendar'],
@@ -86,32 +86,12 @@ export function EventCalendar() {
     return "Location TBD";
   };
 
-  // Check if date has events (either regular or recurring)
+  // Check if date has any events (simplified to not distinguish between event types)
   const hasEvents = (date: Date): boolean => {
     return events?.some(
       (event) => {
         const eventDate = new Date(event.date_start);
         return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
-      }
-    ) ?? false;
-  };
-
-  // Check if date has recurring events
-  const hasRecurringEvents = (date: Date): boolean => {
-    return events?.some(
-      (event) => {
-        const eventDate = new Date(event.date_start);
-        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') && event.is_recurring;
-      }
-    ) ?? false;
-  };
-
-  // Check if date has upcoming (non-recurring) events
-  const hasUpcomingEvents = (date: Date): boolean => {
-    return events?.some(
-      (event) => {
-        const eventDate = new Date(event.date_start);
-        return format(eventDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd') && !event.is_recurring;
       }
     ) ?? false;
   };
@@ -127,25 +107,18 @@ export function EventCalendar() {
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={(date) => date && setSelectedDate(date)}
             className="rounded-md border p-3 pointer-events-auto"
             modifiers={{
-              hasUpcoming: hasUpcomingEvents,
-              hasRecurring: hasRecurringEvents,
+              hasEvents: hasEvents,
               selected: (date) => selectedDate ? format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') : false
             }}
             modifiersStyles={{
-              hasUpcoming: { 
+              hasEvents: { 
                 fontWeight: 'normal',
                 backgroundColor: 'white',
                 color: 'black',
                 border: '2px solid #33C3F0'
-              },
-              hasRecurring: {
-                fontWeight: 'normal',
-                backgroundColor: 'white',
-                color: 'black', 
-                border: '2px dashed #33C3F0'
               },
               selected: {
                 backgroundColor: '#33C3F0',
@@ -157,11 +130,7 @@ export function EventCalendar() {
           <div className="mt-4 flex flex-col gap-2">
             <div className="flex items-center gap-2 text-sm">
               <span className="inline-block h-3 w-3 border-2 border-solid border-church-blue rounded-sm"></span>
-              <span className="text-gray-600">Upcoming Event</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="inline-block h-3 w-3 border-2 border-dashed border-church-blue rounded-sm"></span>
-              <span className="text-gray-600">Recurring Event</span>
+              <span className="text-gray-600">Event</span>
             </div>
           </div>
         </CardContent>
@@ -173,9 +142,7 @@ export function EventCalendar() {
             <div className="flex items-center gap-2 border-b pb-3">
               <CalendarDays className="h-5 w-5 text-church-blue" />
               <h3 className="font-medium text-lg">
-                {selectedDate 
-                  ? format(selectedDate, 'MMMM d, yyyy') 
-                  : "Select a date to view events"}
+                {format(selectedDate, 'MMMM d, yyyy')}
               </h3>
             </div>
             
@@ -195,7 +162,7 @@ export function EventCalendar() {
                   </div>
                 </div>
               </div>
-            ) : selectedDate && (
+            ) : (
               <div className="space-y-4">
                 {selectedDateEvents?.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-10 text-center">
@@ -209,7 +176,7 @@ export function EventCalendar() {
                   </div>
                 ) : (
                   selectedDateEvents?.map((event) => (
-                    <div key={event.id} className={`border rounded-lg p-4 ${event.is_recurring ? 'border-dashed border-church-blue' : 'border-solid'}`}>
+                    <div key={event.id} className={`border rounded-lg p-4 ${event.is_recurring ? 'border-dashed' : 'border-solid'}`}>
                       <div className="flex items-start justify-between">
                         <h4 className="font-medium text-lg">{event.title}</h4>
                         {event.is_recurring && (
