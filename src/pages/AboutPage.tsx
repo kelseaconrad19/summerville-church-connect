@@ -39,8 +39,8 @@ const AboutPage = () => {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-lg">
               <img 
-                src="/images/scoc.png" 
-                alt="Church Building" 
+                src="/images/otherChurch2.jpg" 
+                alt="Photo by Kenny Eliason on Unsplash"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>

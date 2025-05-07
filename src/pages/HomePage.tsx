@@ -11,7 +11,7 @@ const HomePage = () => {
       <section 
         className="relative bg-cover bg-center h-[80vh] flex items-center"
         style={{ 
-          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/scoc.png')",
+          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/otherChurch2.jpg')",
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
